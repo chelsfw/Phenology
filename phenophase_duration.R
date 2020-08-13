@@ -11,6 +11,15 @@ source("/Users/chelseawilmer/Desktop/Watershed Function SFA/pheno/Phenology.data
 #write_csv(pheno, "/Users/chelseawilmer/Desktop/CSU/Thesis/phenology_complete.csv")
 pheno <- select(pheno, -c(Duplicate.Plot, Functional.Type, FBB, FLB))
 
+pheno <- filter(pheno, NL >0 | FLE >0 | FOF>0 | FLCC >0)
+
+#### Test of common species filter ####
+species <- pheno%>%
+  group_by(Year, Site, Treatment, Species)%>%
+  summarise(species_n = n())
+
+species <- filter(species, species_n >3)
+
 #### Community phenophase duration ####
 # calculate community phenophases (ex. max date of nl - min date of nl)
 # reorder data so that the calculated phenophases are in a column called "Event" and the value is the "DOY" that the event happened
