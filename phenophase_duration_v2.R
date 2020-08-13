@@ -62,7 +62,7 @@ pheno_community_delta$delta_duration <- pheno_community_delta$`2018`-pheno_commu
 
 
 ###########
-# Figure generation 
+# Figure generation for deltas
 ###########
 
 
