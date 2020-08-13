@@ -8,7 +8,7 @@ library(tidyverse)
 
 ## 1. Bring in data ####
 # Set your working directory
-setwd("/Users/chelseawilmer/Desktop/Watershed Function SFA/pheno/Data")
+#setwd("/Users/chelseawilmer/Desktop/Watershed Function SFA/pheno/Data")
 
 # Load data
 pheno <- read.csv("PhenologyData_complete.csv", stringsAsFactors = FALSE, strip.white = TRUE)
@@ -74,4 +74,4 @@ pheno$Species <- ifelse(test = pheno$Species == "Valeriana sp.", "Valeriana edul
 # maybe split into separate data frames for each of the sites
 # make grappppphhhhhsss
 
-write_csv(pheno, "/Users/chelseawilmer/Desktop/Watershed Function SFA/Phenology_Complete.csv")
+#write_csv(pheno, "/Users/chelseawilmer/Desktop/Watershed Function SFA/Phenology_Complete.csv")
