@@ -64,7 +64,7 @@ ggsave("fig_species.png", width = 13, height = 6)
 ##########
 
 # What if you replace the count in pheno_species with 1s and then 
-# Group by species and summarize by counting again. 
+# Group by species and site and summarize by counting again. 
 # Then you could filter species for any instances where you have a count of 4
 
 # Just a thought! 
