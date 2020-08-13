@@ -34,37 +34,25 @@ pheno_species <- pheno %>%
 pheno_species_2017 <- pheno_species %>% filter(Year == 2017)
 pheno_species_2018 <- pheno_species %>% filter(Year == 2018)
 
-# Plotting as tiles the counts of species in treatment/site combinations
-ggplot(pheno_species_2017, aes(x = Species, y = Treatment, fill = count, width=0.7, height=0.7))+
-  geom_tile()+
+
+tile_width = 0.75
+tile_height = 0.75
+
+ggplot()+
+  geom_tile(data = pheno_species_2017, aes(x = Species, y = Treatment, fill = count, width=tile_width, height=tile_height))+
+  geom_tile(data = pheno_species_2018, fill=NA, size=1, aes(x = Species, y = Treatment, color = count, width=tile_width, height=tile_height))+
   facet_grid(Site ~ ., labeller = label_wrap_gen(width = 10))+
   scale_fill_gradient(low="white", high="forestgreen")+
-  labs(title = "2017")+
+  scale_color_gradient(low="white", high="black")+
+  labs(title = "Species occurance", fill = "2017", colour = "2018")+
   theme(panel.background = element_blank(),
         plot.title = element_text(hjust = 0.5),
-        axis.text.x = element_text(angle = 270, hjust = 0),
+        axis.text.x = element_text(angle = 270, hjust = 0, vjust = 0.5),
         panel.border = element_rect(colour="black",size=1, fill=NA),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         strip.background =element_rect(color = 'white', fill='white'), 
         strip.text = element_text(size=8))
-ggsave("fig_species_2017.png", width = 12, height = 6)
-
-
-
-ggplot(pheno_species_2018, aes(x = Species, y = Treatment, fill = count, width=0.7, height=0.7))+
-  geom_tile()+
-  facet_grid(Site ~ ., labeller = label_wrap_gen(width = 10))+
-  scale_fill_gradient(low="white", high="forestgreen")+
-  labs(title = "2018")+
-  theme(panel.background = element_blank(),
-        plot.title = element_text(hjust = 0.5),
-        axis.text.x = element_text(angle = 270, hjust = 0),
-        panel.border = element_rect(colour="black",size=1, fill=NA),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        strip.background =element_rect(color = 'white', fill='white'), 
-        strip.text = element_text(size=8))
-ggsave("fig_species_2018.png", width = 12, height = 6)
+ggsave("fig_species.png", width = 13, height = 6)
 
 
