@@ -8,17 +8,17 @@ library(tidyverse)
 rm(list=ls())
 #### Gather and combine soil water content files ####
 #Set directory to the place where the files are saved
-#getwd()
-#setwd("/Users/chelseawilmer/Desktop/Github/Phenology/Microclimate/ALP")
+getwd()
+setwd("/Users/chelseawilmer/Desktop/Github/Phenology/Microclimate")
 
 #Read in the list of file names
-alp.microclimate.files <- list.files(path = ".")[grep("*.csv",(list.files(path = ".")))]
-alp.microclimate.files
+all.files <- list.files(path = ".")[grep("*.csv",(list.files(path = ".")))]
+all.files
 
 #Using functions from dplyr and data.table to append files - any column that isn't duplicated across files auto fills with NA
 
 #bind_rows 
-alp.combined_files <- bind_rows(lapply(alp.microclimate.files, fread, skip=2, header=TRUE))
+combined_files <- bind_rows(lapply(combined.files, fread, skip=2, header=TRUE))
 
 
 # establish date data type
