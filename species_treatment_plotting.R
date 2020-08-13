@@ -6,12 +6,13 @@ rm(list = ls())
 ## Packages:
 library(tidyverse)
 
-####Bring in phenology data####
-pheno <- read.csv("PhenologyData_complete.csv")
+#### Bring in phenology data####
+source("Phenology.data.cleanup.R")
 
 #### Remove unused data and convert sites to factors ####
-pheno<-select(pheno, -c(FBB, FLB, SG, NL2, FLE2, FLD, SG, DOYsf))
-pheno$Site<- factor(pheno$Site, levels = c("Alpine", "Upper Sub-alpine", "Lower Sub-alpine","Upper Montane", "Lower Montane"))
+pheno <- select(pheno, -c(Functional.Type, FBB, FLB))
+pheno$Site <- factor(pheno$Site, levels = c("ALP", "USA", "LSA","UM", "LM"))
+
 
 ## Determine if species has data recorded for it 
 ## by summing across observation rows
@@ -20,13 +21,13 @@ pheno %>%
   rowSums(na.rm=TRUE) -> pheno$presence 
 
 # Convert non-zero values to 1
-pheno <- pheno %>% mutate(presence = replace(presence, presence > 0, 1))
+pheno_presence <- pheno %>% mutate(presence = replace(presence, presence > 0, 1))
 
 # remove DOY observation information
-pheno<-select(pheno, -c(NL, FLE, FOF, FLCC))
+pheno_presence<-select(pheno_presence, -c(DOYsf, NL, FLE, FOF, FLCC))
 
 #Count the number of species observed for year/site/treatment
-pheno_species <- pheno %>% 
+pheno_species <- pheno_presence %>% 
   group_by(Treatment, Year, Site, Species) %>%
   summarise(count = sum(presence, na.rm = T))
 
@@ -34,7 +35,9 @@ pheno_species <- pheno %>%
 pheno_species_2017 <- pheno_species %>% filter(Year == 2017)
 pheno_species_2018 <- pheno_species %>% filter(Year == 2018)
 
-
+##########
+# generating presence/absence plot by species
+##########
 tile_width = 0.75
 tile_height = 0.75
 
@@ -54,5 +57,16 @@ ggplot()+
         strip.background =element_rect(color = 'white', fill='white'), 
         strip.text = element_text(size=8))
 ggsave("fig_species.png", width = 13, height = 6)
+
+
+#########
+##### Ideas for species filtering
+##########
+
+# What if you replace the count in pheno_species with 1s and then 
+# Group by species and summarize by counting again. 
+# Then you could filter species for any instances where you have a count of 4
+
+# Just a thought! 
 
 

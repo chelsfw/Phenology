@@ -7,29 +7,31 @@ rm(list = ls())
 library(tidyverse)
 
 ####Bring in phenology data####
-pheno <- read.csv("PhenologyData_complete.csv")
+#pheno <- read.csv("PhenologyData_complete.csv")
+source("Phenology.data.cleanup.R")
+
 #write_csv(pheno, "/Users/chelseawilmer/Desktop/CSU/Thesis/phenology_complete.csv")
-#pheno <- select(pheno, -c(Functional.Type, FBB, FLB))
-#pheno$Site <- factor(pheno$Site, levels = c("ALP", "USA", "LSA","UM", "LM"))
+pheno <- select(pheno, -c(Functional.Type, FBB, FLB))
+pheno$Site <- factor(pheno$Site, levels = c("ALP", "USA", "LSA","UM", "LM"))
 
 #### Community phenophase duration ####
 # calculate community phenophases (ex. max date of nl - min date of nl)
 # reorder data so that the calculated phenophases are in a column called "Event" and the value is the "DOY" that the event happened
-pheno<-select(pheno, -c(FBB, FLB, SG, NL2, FLE2, FLD, SG))
-pheno$Site<- factor(pheno$Site, levels = c("Alpine", "Upper Sub-alpine", "Lower Sub-alpine","Upper Montane", "Lower Montane"))
 
 # I grouped these actions together here 
 pheno <- pheno %>% 
   # pivot longer lets you designate columns by name so that if the order changes it's ok
   pivot_longer(cols = c("NL", "FLE", "FOF","FLCC"),
                         names_to = "Event", values_to = "DOY") 
+
+# setting event names to be factors
 pheno$Event<- factor(pheno$Event, levels = c("NL", "FLE", "FOF","FLCC"))
 
 ###########
 # Plot level delta calculations 
 ###########
 pheno_plot <- pheno %>% 
-  group_by(Block.Plot, Treatment, Event, Year, Site) %>%
+  group_by(Block, Plot, Treatment, Event, Year, Site) %>%
   summarise(max = max(DOY, na.rm = T),
             min = min(DOY, na.rm = T))
 pheno_plot$plot_duration <- pheno_plot$max - pheno_plot$min
@@ -71,6 +73,7 @@ ggplot(pheno_plot_delta, aes(Event, delta_duration, color = Treatment))+
   geom_abline(intercept = 0, slope = 0, colour = 'gray')+
   geom_boxplot()+
   facet_grid(Site~.)+
+  # wrapping into different columns/rows of subsets
   facet_wrap(Site ~., nrow=2, ncol=3) +
   theme_bw()+
   theme(panel.background = element_blank(),
@@ -80,6 +83,7 @@ ggplot(pheno_plot_delta, aes(Event, delta_duration, color = Treatment))+
         #this is where I change the gray boxes to white and change the size of text
         strip.background =element_rect(color = 'white', fill='white'), 
         strip.text = element_text(size=12), 
+        # put the legend into the extra facet
         legend.position = c(1, 0),
         legend.justification = c(1, 0))+
   labs(y="Change in duration (2018 - 2017)")
