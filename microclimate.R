@@ -8,17 +8,17 @@ library(tidyverse)
 rm(list=ls())
 #### Gather and combine soil water content files ####
 #Set directory to the place where the files are saved
-getwd()
-setwd("/Users/chelseawilmer/Desktop/Github/WSFSFA-Veg/Microclimate/LM and LSA 2019 test")
+#getwd()
+#setwd("/Users/chelseawilmer/Desktop/Github/Phenology/Microclimate/ALP")
 
 #Read in the list of file names
-ndvi.files <- list.files(path = ".")[grep("*.csv",(list.files(path = ".")))]
-ndvi.files
+alp.microclimate.files <- list.files(path = ".")[grep("*.csv",(list.files(path = ".")))]
+alp.microclimate.files
 
 #Using functions from dplyr and data.table to append files - any column that isn't duplicated across files auto fills with NA
 
 #bind_rows 
-combined_files <- bind_rows(lapply(ndvi.files, fread, skip=2, header=TRUE))
+alp.combined_files <- bind_rows(lapply(alp.microclimate.files, fread, skip=2, header=TRUE))
 
 
 # establish date data type
@@ -51,8 +51,12 @@ daily_means <- combined_files %>%
 
 daily_means$ST[which(daily_means$ST<=0 | daily_means$ST>=100)] = 0
 
-#daily_means <- gather(daily_means, key = "Climate", value = "Value", 6:7) %>% 
-#  group_by(Climate) #key
+daily_means <- gather(daily_means, key = "Climate", value = "Value", 6:7) %>% 
+  group_by(Climate) #key
+
+ggplot(daily_means, aes(DOY, Value, color = Plot))+
+  geom_point()+
+  facet_grid(Climate~., scales = "free")
 
 ggplot(daily_means, aes(DOY, ST, color = Plot))+
   geom_point()+
