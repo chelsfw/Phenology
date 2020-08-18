@@ -12,7 +12,7 @@ source("/Users/chelseawilmer/Desktop/Watershed Function SFA/pheno/Phenology.data
 #remove columns that we don't need
 pheno <- select(pheno, -c(Duplicate.Plot, FBB, FLB))
 
-#filter observations to those that have NL, FLE, FOF, and FLCC
+#filter observations to those that have a vlaue for NL, FLE, FOF, and FLCC
 pheno <- filter(pheno, NL >0 | FLE >0 | FOF>0 | FLCC >0)
 pheno$Site <- factor(pheno$Site, levels = c("ALP", "USA", "LSA","UM", "LM"))
 
@@ -22,24 +22,87 @@ pheno <- pheno %>%
   pivot_longer(cols = c("NL", "FLE", "FOF","FLCC"),
                names_to = "Event", values_to = "DOY") 
 
+#omit NA values after pivot longer to avoid -Inf and Inf values later down the line
+pheno <- na.omit(pheno)
+
+# set the levels of the sites. 
 pheno$Event<- factor(pheno$Event, levels = c("NL", "FLE", "FOF","FLCC"))
 
-#calculate durations as max-min for each event for each species
-pheno_species <- pheno %>% 
+####Find shared species####
+pheno_species_shared <- pheno %>% 
+  distinct(Year, Site, Treatment, Species)
+
+pheno_species_shared$presence = 1
+
+pheno_species_shared <- pheno_species_shared%>%
+  group_by(Site, Species)%>%
+  summarise(count = sum(presence))
+
+#filter species down to those that have a presence of four for being shared between 2017 trmt and ctrl (2) and 2018 trmt and ctrl (2) = (4)
+pheno_species_shared <- pheno_species_shared%>%
+  filter(count == 4)
+
+#make a filter (list) for species shared across years and treatments at each site
+shared_LM <-  filter(pheno_species_shared, Site == "LM")
+shared_LM <- unique(shared_LM$Species)
+
+shared_UM <-  filter(pheno_species_shared, Site == "UM")
+shared_UM <- unique(shared_UM$Species)
+
+shared_LSA <-  filter(pheno_species_shared, Site == "LSA")
+shared_LSA <- unique(shared_LSA$Species)
+
+shared_USA <-  filter(pheno_species_shared, Site == "USA")
+shared_USA <- unique(shared_USA$Species)
+
+shared_ALP <-  filter(pheno_species_shared, Site == "ALP")
+shared_ALP <- unique(shared_ALP$Species)
+
+####Filter pheno by shared species for each site using the site specific lists####
+pheno_lm <- filter(pheno, Site == "LM")
+pheno_lm <- subset(pheno_lm, Species %in% shared_LM)
+
+pheno_um <- filter(pheno, Site == "UM")
+pheno_um <- subset(pheno_um, Species %in% shared_UM)
+
+pheno_lsa <- filter(pheno, Site == "LSA")
+pheno_lsa <- subset(pheno_lsa, Species %in% shared_LSA)
+
+pheno_usa <- filter(pheno, Site == "USA")
+pheno_usa <- subset(pheno_usa, Species %in% shared_USA)
+
+#pheno_alp <- filter(pheno, Site == "ALP")
+#pheno_alp <- subset(pheno, Species %in% shared_ALP)
+
+####RBind site specific pheno data frames####
+pheno <- rbind(pheno_lm, pheno_um, pheno_lsa, pheno_usa)
+
+####Calculate durations and deltas####
+##create durations dataset
+pheno_durations <- pheno %>% 
   group_by(Year, Site, Treatment, Species, Event) %>%
   summarise(max = max(DOY, na.rm = T),
             min = min(DOY, na.rm = T))
+
+#calculate durations
+pheno_durations$species_duration <- pheno_durations$max - pheno_durations$min
+
+pheno_durations <- pheno_durations%>%
+  select(-c(max, min))%>%
+  group_by(Year, Site, Species, Treatment, Event)%>%
+  summarise(mean_duration = mean(species_duration, na.rm = T))
+
+##reorder dataframe to create deltas dataset
+pheno_deltas <- pheno_durations %>% 
+  pivot_wider(names_from = Year, values_from = mean_duration)
+
 #calculate deltas
-pheno_species$species_duration <- pheno_species$max - pheno_species$min
+pheno_deltas$delta_duration <- pheno_deltas$`2018`-pheno_deltas$`2017`
 
-#reorder dataframe
-pheno_species_delta <- pheno_species %>% 
-  select(-c(max, min)) %>% 
-  pivot_wider(names_from = Year, values_from = species_duration)
+pheno_deltas <- pheno_deltas%>%
+  select(-c(`2017`, `2018`))
 
-pheno_species_delta$delta_duration <- pheno_species_delta$`2018`- pheno_species_delta$`2017`
-
-
-
-
+####Write durations and deltas dataset to .csv's####
+write.csv(pheno_deltas, "/Users/chelseawilmer/Desktop/Github/Phenology/deltas.csv")
+write.csv(pheno_durations, "/Users/chelseawilmer/Desktop/Github/Phenology/durations.csv")
 
