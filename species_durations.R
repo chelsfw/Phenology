@@ -55,8 +55,8 @@ shared_LSA <- unique(shared_LSA$Species)
 shared_USA <-  filter(pheno_species_shared, Site == "USA")
 shared_USA <- unique(shared_USA$Species)
 
-shared_ALP <-  filter(pheno_species_shared, Site == "ALP")
-shared_ALP <- unique(shared_ALP$Species)
+#shared_ALP <-  filter(pheno_species_shared, Site == "ALP")
+#shared_ALP <- unique(shared_ALP$Species)
 
 ####Filter pheno by shared species for each site using the site specific lists####
 pheno_lm <- filter(pheno, Site == "LM")
@@ -88,12 +88,12 @@ pheno_durations <- pheno %>%
 pheno_durations$species_duration <- pheno_durations$max - pheno_durations$min
 
 pheno_durations <- pheno_durations%>%
-  select(-c(max, min))%>%
   group_by(Year, Site, Species, Treatment, Event)%>%
   summarise(mean_duration = mean(species_duration, na.rm = T))
 
 ##reorder dataframe to create deltas dataset
-pheno_deltas <- pheno_durations %>% 
+pheno_deltas <- pheno_durations %>%
+  select(-c(max, min))%>%
   pivot_wider(names_from = Year, values_from = mean_duration)
 
 #calculate deltas
@@ -102,7 +102,9 @@ pheno_deltas$delta_duration <- pheno_deltas$`2018`-pheno_deltas$`2017`
 pheno_deltas <- pheno_deltas%>%
   select(-c(`2017`, `2018`))
 
-####Write durations and deltas dataset to .csv's####
+####Write durations and deltas datasets to .csv's####
 write.csv(pheno_deltas, "/Users/chelseawilmer/Desktop/Github/Phenology/deltas.csv")
 write.csv(pheno_durations, "/Users/chelseawilmer/Desktop/Github/Phenology/durations.csv")
+
+####
 
