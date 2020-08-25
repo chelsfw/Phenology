@@ -8,9 +8,11 @@ library(tidyverse)
 
 ####Bring in phenology data####
 source("/Users/chelseawilmer/Desktop/Watershed Function SFA/pheno/Phenology.data.cleanup.R")
+# path for Dana
+source("Phenology.data.cleanup.R")
 
 #remove columns that we don't need
-pheno <- select(pheno, -c(Duplicate.Plot, FBB, FLB))
+pheno <- select(pheno, -c(FBB, FLB, X))
 
 #filter observations to those that have a vlaue for NL, FLE, FOF, and FLCC
 pheno <- filter(pheno, NL >0 & FLE >0 & FOF>0 & FLCC >0) #playing around with difference between & and | to filter. if '&' it cuts the data down to only observations that have values for ALL phenophases that year.
@@ -95,6 +97,12 @@ pheno_durations <- pheno %>%
 #calculate durations
 pheno_durations$species_duration <- pheno_durations$max - pheno_durations$min
 
+pheno_treatment_effects <- pheno_durations %>%
+  select(-c(max, min, n, species_duration))%>%
+  pivot_wider(names_from = Treatment, values_from = mean)
+
+pheno_treatment_effects$Effect <- pheno_treatment_effects$Treatment - pheno_treatment_effects$Control
+
 ##reorder dataframe to create deltas dataset
 pheno_deltas <- pheno_durations %>%
   select(-c(max, min, n, mean))%>%
@@ -109,6 +117,7 @@ pheno_deltas <- pheno_deltas%>%
 ####Write durations and deltas datasets to .csv's####
 write.csv(pheno_deltas, "/Users/chelseawilmer/Desktop/Github/Phenology/deltas.csv")
 write.csv(pheno_durations, "/Users/chelseawilmer/Desktop/Github/Phenology/durations.csv")
+write.csv(pheno_treatment_effects, 'treatment_effects.csv')
 
 
 

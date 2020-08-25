@@ -59,6 +59,9 @@ ggplot()+
 ggsave("fig_species.png", width = 13, height = 6)
 
 
+
+
+
 #########
 ##### Ideas for species filtering
 ##########
@@ -70,3 +73,26 @@ ggsave("fig_species.png", width = 13, height = 6)
 # Just a thought! 
 
 
+
+treatment <- read.csv("treatment_effects.csv")
+
+treatment$Year <- as.character(treatment$Year)
+
+ggplot(treatment, aes(Event, Effect, color = Year))+
+  geom_abline(intercept = 0, slope = 0, colour = 'gray')+
+  geom_boxplot()+
+  facet_grid(Site~.)+
+  # wrapping into different columns/rows of subsets
+  facet_wrap(Site ~., nrow=2, ncol=2) +
+  theme_bw()+
+  theme(panel.background = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), 
+        
+        #this is where I change the gray boxes to white and change the size of text
+        strip.background =element_rect(color = 'white', fill='white'), 
+        strip.text = element_text(size=12)) 
+        # put the legend into the extra facet
+        #legend.position = c(1, 0),
+        #legend.justification = c(1, 0))+
+  labs(y="Treatment Effect")
