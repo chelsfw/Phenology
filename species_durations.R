@@ -2,7 +2,7 @@ rm(list = ls())
 ## Date: 2020-04-10
 ## User: Chelsea Wilmer
 ## SFA/CSU Thesis
-## Script: Exploratory analysis for duration of pheno events
+## Script: Creating files for duration of pheno events and change in duration of pheno events
 ## Packages:
 library(tidyverse)
 
@@ -13,7 +13,8 @@ source("/Users/chelseawilmer/Desktop/Watershed Function SFA/pheno/Phenology.data
 pheno <- select(pheno, -c(Duplicate.Plot, FBB, FLB))
 
 #filter observations to those that have a vlaue for NL, FLE, FOF, and FLCC
-pheno <- filter(pheno, NL >0 | FLE >0 | FOF>0 | FLCC >0)
+pheno <- filter(pheno, NL >0 & FLE >0 & FOF>0 & FLCC >0) #playing around with difference between & and | to filter. if '&' it cuts the data down to only observations that have values for ALL phenophases that year.
+
 pheno$Site <- factor(pheno$Site, levels = c("ALP", "USA", "LSA","UM", "LM"))
 
 #reorder dataset so that NL, FLE, FOF, and FLCC are in colum 'Event' and the values are in column 'DOY'
@@ -77,24 +78,27 @@ pheno_usa <- subset(pheno_usa, Species %in% shared_USA)
 ####RBind site specific pheno data frames####
 pheno <- rbind(pheno_lm, pheno_um, pheno_lsa, pheno_usa)
 
+#Remove extra dataframes from workspace
+rm(pheno_lm, pheno_um, pheno_lsa, pheno_usa, pheno_species_shared)
+
 ####Calculate durations and deltas####
 ##create durations dataset
 pheno_durations <- pheno %>% 
-  group_by(Year, Site, Treatment, Species, Event) %>%
+  group_by(Year, Site, Treatment, Species, Event) %>% #added Block to get sd, n, se
   summarise(max = max(DOY, na.rm = T),
-            min = min(DOY, na.rm = T))
+            min = min(DOY, na.rm = T),
+            mean = mean(DOY, na.rm = T), #added 8/20 8:50am
+            #sd = sd(DOY, na.rm = T), #added 8/20 8:50am
+            n = n()) #added 8/20 8:50am
+            #se = sd/sqrt(n)) #added 8/20 8:50am
 
 #calculate durations
 pheno_durations$species_duration <- pheno_durations$max - pheno_durations$min
 
-pheno_durations <- pheno_durations%>%
-  group_by(Year, Site, Species, Treatment, Event)%>%
-  summarise(mean_duration = mean(species_duration, na.rm = T))
-
 ##reorder dataframe to create deltas dataset
 pheno_deltas <- pheno_durations %>%
-  select(-c(max, min))%>%
-  pivot_wider(names_from = Year, values_from = mean_duration)
+  select(-c(max, min, n, mean))%>%
+  pivot_wider(names_from = Year, values_from = species_duration)
 
 #calculate deltas
 pheno_deltas$delta_duration <- pheno_deltas$`2018`-pheno_deltas$`2017`
@@ -106,5 +110,5 @@ pheno_deltas <- pheno_deltas%>%
 write.csv(pheno_deltas, "/Users/chelseawilmer/Desktop/Github/Phenology/deltas.csv")
 write.csv(pheno_durations, "/Users/chelseawilmer/Desktop/Github/Phenology/durations.csv")
 
-####
+
 
