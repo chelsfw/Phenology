@@ -7,14 +7,12 @@ rm(list = ls())
 library(tidyverse)
 
 ####Bring in phenology data####
-source("/Users/chelseawilmer/Desktop/Watershed Function SFA/pheno/Phenology.data.cleanup.R")
+source("/Users/chelseawilmer/Desktop/Github/Phenology/Phenology.data.cleanup.R")
 # path for Dana
-source("Phenology.data.cleanup.R")
+#source("Phenology.data.cleanup.R")
 
 #remove columns that we don't need
 pheno <- select(pheno, -c(Duplicate.Plot, FBB, FLB, Plot))
-
-pheno <- select(pheno, -c(FBB, FLB, X))
 
 #filter observations to those that have a vlaue for NL, FLE, FOF, and FLCC
 #playing around with difference between & and | to filter. if '&' it cuts the data down to only observations that have values for ALL phenophases that year. 
