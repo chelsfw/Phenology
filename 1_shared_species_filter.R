@@ -10,14 +10,16 @@ library(tidyverse)
 source("/Users/chelseawilmer/Desktop/Watershed Function SFA/pheno/Phenology.data.cleanup.R")
 
 #remove columns that we don't need
-pheno <- select(pheno, -c(Duplicate.Plot, FBB, FLB))
+pheno <- select(pheno, -c(Duplicate.Plot, FBB, FLB, Plot))
 
 #filter observations to those that have a vlaue for NL, FLE, FOF, and FLCC
-pheno <- filter(pheno, NL >0 & FLE >0 & FOF>0 & FLCC >0) #playing around with difference between & and | to filter. if '&' it cuts the data down to only observations that have values for ALL phenophases that year.
+#playing around with difference between & and | to filter. if '&' it cuts the data down to only observations that have values for ALL phenophases that year. 
+#pheno <- filter(pheno, NL >0 | FLE >0 | FOF>0 | FLCC >0) 
+pheno <- filter(pheno, NL >0 & FLE >0 & FOF>0 & FLCC >0) 
 
 pheno$Site <- factor(pheno$Site, levels = c("ALP", "USA", "LSA","UM", "LM"))
 
-#reorder dataset so that NL, FLE, FOF, and FLCC are in colum 'Event' and the values are in column 'DOY'
+#reorder dataset so that NL, FLE, FOF, and FLCC are in column 'Event' and the values are in column 'DOY'
 pheno <- pheno %>% 
   # pivot longer lets you designate columns by name so that if the order changes it's ok
   pivot_longer(cols = c("NL", "FLE", "FOF","FLCC"),
@@ -30,11 +32,14 @@ pheno <- na.omit(pheno)
 pheno$Event<- factor(pheno$Event, levels = c("NL", "FLE", "FOF","FLCC"))
 
 ####Find shared species####
+#makes a plot specific list of species
 pheno_species_shared <- pheno %>% 
   distinct(Year, Site, Treatment, Species)
 
+#create presence column and fill it with 1s
 pheno_species_shared$presence = 1
 
+#group down to site and species and sum the presence column. a presence of 4 for species means it was present in both treatments in 2017 (2) and both treatments in 2018 (2) 
 pheno_species_shared <- pheno_species_shared%>%
   group_by(Site, Species)%>%
   summarise(count = sum(presence))
@@ -81,34 +86,8 @@ pheno <- rbind(pheno_lm, pheno_um, pheno_lsa, pheno_usa)
 #Remove extra dataframes from workspace
 rm(pheno_lm, pheno_um, pheno_lsa, pheno_usa, pheno_species_shared)
 
-####Calculate durations and deltas####
-##create durations dataset
-pheno_durations <- pheno %>% 
-  group_by(Year, Site, Treatment, Species, Event) %>% #added Block to get sd, n, se
-  summarise(max = max(DOY, na.rm = T),
-            min = min(DOY, na.rm = T),
-            mean = mean(DOY, na.rm = T), #added 8/20 8:50am
-            #sd = sd(DOY, na.rm = T), #added 8/20 8:50am
-            n = n()) #added 8/20 8:50am
-            #se = sd/sqrt(n)) #added 8/20 8:50am
+#Write .csv for pheno <- filter(pheno, NL >0 | FLE >0 | FOF>0 | FLCC >0)
+write.csv(pheno, "/Users/chelseawilmer/Desktop/Github/Phenology/Phenology_at_least_one_phenophase_observed.csv")
 
-#calculate durations
-pheno_durations$species_duration <- pheno_durations$max - pheno_durations$min
-
-##reorder dataframe to create deltas dataset
-pheno_deltas <- pheno_durations %>%
-  select(-c(max, min, n, mean))%>%
-  pivot_wider(names_from = Year, values_from = species_duration)
-
-#calculate deltas
-pheno_deltas$delta_duration <- pheno_deltas$`2018`-pheno_deltas$`2017`
-
-pheno_deltas <- pheno_deltas%>%
-  select(-c(`2017`, `2018`))
-
-####Write durations and deltas datasets to .csv's####
-write.csv(pheno_deltas, "/Users/chelseawilmer/Desktop/Github/Phenology/deltas.csv")
-write.csv(pheno_durations, "/Users/chelseawilmer/Desktop/Github/Phenology/durations.csv")
-
-
-
+#Write .csv for pheno <- filter(pheno, NL >0 & FLE >0 & FOF>0 & FLCC >0)
+write.csv(pheno, "/Users/chelseawilmer/Desktop/Github/Phenology/Phenology_all_phenophases_observed.csv")
