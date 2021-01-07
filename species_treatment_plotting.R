@@ -91,7 +91,7 @@ ggplot(treatment, aes(Event, Effect, color = Year))+
         
         #this is where I change the gray boxes to white and change the size of text
         strip.background =element_rect(color = 'white', fill='white'), 
-        strip.text = element_text(size=12)) 
+        strip.text = element_text(size=12))+
         # put the legend into the extra facet
         #legend.position = c(1, 0),
         #legend.justification = c(1, 0))+
