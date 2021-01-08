@@ -50,6 +50,17 @@ treatment <- na.omit(treatment)
 treatment$effect_of_treatment <- treatment$Treatment - treatment$Control
 
 ####Visuals####
+#year
+year$Event<- factor(year$Event, levels = c("NL", "FLE", "FOF","FLCC"))
+year%>%
+  filter(Site == "ALP")%>%
+  ggplot(aes(Species, effect_of_year))+
+  geom_bar(stat = "identity", position = "dodge")+
+  coord_flip()+
+  facet_grid(~Event)+
+  labs(title = "Alpine", y = "number of days early (-) or delayed (+)")
+
+#treatment
 treatment$Event<- factor(treatment$Event, levels = c("NL", "FLE", "FOF","FLCC"))
 treatment%>%
   filter(Site == "UM")%>%
@@ -57,7 +68,7 @@ treatment%>%
   geom_bar(stat = "identity", position = "dodge")+
   coord_flip()+
   facet_grid(~Event)+
-  labs(y = "number of days early (-) or delayed (+)")
+  labs(title = "Upper Montane", y = "number of days early (-) or delayed (+)")
 
 treatment%>%
   filter(Site == "LSA")%>%
@@ -65,7 +76,7 @@ treatment%>%
   geom_bar(stat = "identity", position = "dodge")+
   coord_flip()+
   facet_grid(~Event)+
-  labs(y = "number of days early (-) or delayed (+)")
+  labs(title = "Lower Subalpine", y = "number of days early (-) or delayed (+)")
 
 treatment%>%
   filter(Site == "USA")%>%
@@ -73,4 +84,10 @@ treatment%>%
   geom_bar(stat = "identity", position = "dodge")+
   coord_flip()+
   facet_grid(~Event)+
-  labs(y = "number of days early (-) or delayed (+)")
+  labs(title = "Upper Subalpine", y = "number of days early (-) or delayed (+)")
+
+####Next Steps####
+#why doesn't LM treatment have any data?!?
+#how to do summary stats (sd, se)
+#difference from control
+#investigating where the durations data is at
