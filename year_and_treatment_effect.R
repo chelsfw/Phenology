@@ -24,7 +24,9 @@ pheno <- pheno %>%
 year <- pheno%>%
   group_by(Year, Site, Treatment, Species, Event)%>%
   summarise(meanDOY = mean(DOY, na.rm = T),
-            n = n())
+            n = n(),
+            sd = sd(DOY, na.rm = T),
+            se = sd/sqrt(n))
 
 #reorder dataset to calculate the difference in the timing of events for specific species between years
 year <- year%>%
