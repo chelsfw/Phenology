@@ -28,7 +28,7 @@ pheno <- pheno %>%
                names_to = "Event", values_to = "DOY") 
 
 #omit NA values after pivot longer to avoid -Inf and Inf values later down the line
-pheno <- na.omit(pheno)
+#pheno <- na.omit(pheno)
 
 # set the levels of the sites. 
 pheno$Event<- factor(pheno$Event, levels = c("NL", "FLE", "FOF","FLCC"))
@@ -88,8 +88,9 @@ pheno <- rbind(pheno_lm, pheno_um, pheno_lsa, pheno_usa)
 #Remove extra dataframes from workspace
 rm(pheno_lm, pheno_um, pheno_lsa, pheno_usa, pheno_species_shared)
 
-#Write .csv for pheno <- filter(pheno, NL >0 | FLE >0 | FOF>0 | FLCC >0)
+#Write .csv for pheno <- filter(pheno, NL >0 | FLE >0 | FOF>0 | FLCC >0). You have to comment out pheno <- filter(pheno, NL >0 & FLE >0 & FOF>0 & FLCC >0) to run
 write.csv(pheno, "/Users/chelseawilmer/Desktop/Github/Phenology/Phenology_at_least_one_phenophase_observed.csv")
 
-#Write .csv for pheno <- filter(pheno, NL >0 & FLE >0 & FOF>0 & FLCC >0)
+#Write .csv for pheno <- filter(pheno, NL >0 & FLE >0 & FOF>0 & FLCC >0). You have to comment out pheno <- filter(pheno, NL >0 | FLE >0 | FOF>0 | FLCC >0) to run
 write.csv(pheno, "/Users/chelseawilmer/Desktop/Github/Phenology/Phenology_all_phenophases_observed.csv")
+
