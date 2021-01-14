@@ -8,7 +8,7 @@ library(tidyverse)
 
 ## 1. Bring in data ####
 # Set your working directory
-#setwd("/Users/chelseawilmer/Desktop/Watershed Function SFA/pheno/Data")
+setwd("/Users/chelseawilmer/Desktop/Github/Phenology")
 
 # Load data
 pheno <- read.csv("PhenologyData_complete.csv", stringsAsFactors = FALSE, strip.white = TRUE)
