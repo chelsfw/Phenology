@@ -19,7 +19,7 @@ str(pheno) #check column names, check data types
 # Clean up column names
 # Use rename to rename columns
 # Rename all columns at once
-pheno <- rename(pheno, Veg.Type = Veg.type, Functional.Type = functional.type) # new name equals = old name
+pheno <- dplyr::rename(pheno, Veg.Type = Veg.type, Functional.Type = functional.type) # new name equals = old name
 # Use select to remove unwanted columns
 pheno <- select(pheno, -c(SG, NL2, FLE2, FLD)) # drop variables that are not currently going to be used for analysis. May want to include these later
 
@@ -46,7 +46,7 @@ pheno$Site <- ifelse(test = pheno$Site == "Upper Montane", yes = "UM", no = phen
 pheno$Site <- ifelse(test = pheno$Site == "Lower Montane", yes = "LM", no = pheno$Site)
 
 ## $Duplicate.Plot
-pheno <- rename(pheno, Duplicate.Plot = Block.Plot)
+pheno <- dplyr::rename(pheno, Duplicate.Plot = Block.Plot)
 # use logical ifelse statement to assign new values 
 pheno$Duplicate.Plot <- ifelse(test = pheno$Duplicate.Plot == "B2 2018" | pheno$Duplicate.Plot == "C1 2018", yes = "Y", no = "N")
 

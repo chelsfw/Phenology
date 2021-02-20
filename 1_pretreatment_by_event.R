@@ -118,7 +118,7 @@ usa <- FLE%>%
 
 ggarrange(lm, um, lsa, usa)
 
-####FLE####
+####FOF####
 FOF <- filter(pretreatment, Event == "FOF")
 
 FOF <- na.omit(FOF)
@@ -157,7 +157,7 @@ usa <- FOF%>%
 
 ggarrange(lm, um, lsa, usa)
 
-####FLE####
+####FLCC####
 FLCC <- filter(pretreatment, Event == "FLCC")
 
 FLCC <- na.omit(FLCC)

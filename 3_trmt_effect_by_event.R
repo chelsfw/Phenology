@@ -52,7 +52,7 @@ lm <- NL%>%
   ggplot(aes(Species, effect))+
   geom_col()+
   coord_flip()+
-  scale_y_continuous(limits = c(-20,10))+
+  scale_y_continuous(limits = c(-30,30))+
   labs(title = "LM")
 
 um <- NL%>%
@@ -60,7 +60,7 @@ um <- NL%>%
   ggplot(aes(Species, effect))+
   geom_col()+
   coord_flip()+
-  scale_y_continuous(limits = c(-20,10))+
+  scale_y_continuous(limits = c(-30,30))+
   labs(title = "UM")
 
 lsa <- NL%>%
@@ -68,7 +68,7 @@ lsa <- NL%>%
   ggplot(aes(Species, effect))+
   geom_col()+
   coord_flip()+
-  scale_y_continuous(limits = c(-20,10))+
+  scale_y_continuous(limits = c(-30,30))+
   labs(title = "LSA")
 
 usa <- NL%>%
@@ -76,7 +76,7 @@ usa <- NL%>%
   ggplot(aes(Species, effect))+
   geom_col()+
   coord_flip()+
-  scale_y_continuous(limits = c(-20,10))+
+  scale_y_continuous(limits = c(-30,30))+
   labs(title = "USA")
 
 ggarrange(lm, um, lsa, usa)
@@ -91,7 +91,7 @@ lm <- FLE%>%
   ggplot(aes(Species, effect))+
   geom_col()+
   coord_flip()+
-  scale_y_continuous(limits = c(-25,10))+
+  scale_y_continuous(limits = c(-30,30))+
   labs(title = "LM")
 
 um <- FLE%>%
@@ -99,7 +99,7 @@ um <- FLE%>%
   ggplot(aes(Species, effect))+
   geom_col()+
   coord_flip()+
-  scale_y_continuous(limits = c(-25,10))+
+  scale_y_continuous(limits = c(-30,30))+
   labs(title = "UM")
 
 lsa <- FLE%>%
@@ -107,7 +107,7 @@ lsa <- FLE%>%
   ggplot(aes(Species, effect))+
   geom_col()+
   coord_flip()+
-  scale_y_continuous(limits = c(-25,10))+
+  scale_y_continuous(limits = c(-30,30))+
   labs(title = "LSA")
 
 usa <- FLE%>%
@@ -115,7 +115,7 @@ usa <- FLE%>%
   ggplot(aes(Species, effect))+
   geom_col()+
   coord_flip()+
-  scale_y_continuous(limits = c(-25,10))+
+  scale_y_continuous(limits = c(-30,30))+
   labs(title = "USA")
 
 ggarrange(lm, um, lsa, usa)
@@ -130,7 +130,7 @@ lm <- FOF%>%
   ggplot(aes(Species, effect))+
   geom_col()+
   coord_flip()+
-  scale_y_continuous(limits = c(-30,20))+
+  scale_y_continuous(limits = c(-30,30))+
   labs(title = "LM")
 
 um <- FOF%>%
@@ -138,7 +138,7 @@ um <- FOF%>%
   ggplot(aes(Species, effect))+
   geom_col()+
   coord_flip()+
-  scale_y_continuous(limits = c(-30,20))+
+  scale_y_continuous(limits = c(-30,30))+
   labs(title = "UM")
 
 lsa <- FOF%>%
@@ -146,7 +146,7 @@ lsa <- FOF%>%
   ggplot(aes(Species, effect))+
   geom_col()+
   coord_flip()+
-  scale_y_continuous(limits = c(-30,20))+
+  scale_y_continuous(limits = c(-30,30))+
   labs(title = "LSA")
 
 usa <- FOF%>%
@@ -154,7 +154,7 @@ usa <- FOF%>%
   ggplot(aes(Species, effect))+
   geom_col()+
   coord_flip()+
-  scale_y_continuous(limits = c(-30,20))+
+  scale_y_continuous(limits = c(-30,30))+
   labs(title = "USA")
 
 ggarrange(lm, um, lsa, usa)

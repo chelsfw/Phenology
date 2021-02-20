@@ -47,4 +47,53 @@ treatment_duration <- treatment_duration%>%
 
 treatment_duration <- na.omit(treatment_duration)
 
-timing_and_duration <- cbind(treatment, treatment_duration)
+timing_and_duration <- left_join(treatment_duration, treatment, by = c("Site", "Treatment", "Species", "Event"))
+
+timing_and_duration <- filter(timing_and_duration, Event == "NL" | Event == "FLE" | Event == "FOF")
+
+lm_erispe <- timing_and_duration%>%
+  filter(Site == "LM", Species == "Erigeron speciosus")%>%
+  ggplot(aes(meanDOY, Duration, color = Treatment))+
+  geom_point()+ 
+  geom_line()+
+  labs(title = "Erigeron speciosus:LM")
+
+um_erispe <- timing_and_duration%>%
+  filter(Site == "UM", Species == "Erigeron speciosus")%>%
+  ggplot(aes(meanDOY, Duration, color = Treatment))+
+  geom_point()+ 
+  geom_line()+
+  labs(title = "Erigeron speciosus:UM")
+
+lsa_erispe <- timing_and_duration%>%
+  filter(Site == "LSA", Species == "Erigeron speciosus")%>%
+  ggplot(aes(meanDOY, Duration, color = Treatment))+
+  geom_point()+ 
+  geom_line()+
+  labs(title = "Erigeron speciosus:LSA")
+
+ggarrange(lm_erispe, um_erispe, lsa_erispe)
+
+lm_achmil <- timing_and_duration%>%
+  filter(Site == "LM", Species == "Achillea millefolium")%>%
+  ggplot(aes(meanDOY, Duration, color = Treatment))+
+  geom_point()+ 
+  geom_line()
+
+lm_achnel <- timing_and_duration%>%
+  filter(Site == "LM", Species == "Achnatherum nelsonii")%>%
+  ggplot(aes(meanDOY, Duration, color = Treatment))+
+  geom_point()+ 
+  geom_line()
+
+lm_arttri <- timing_and_duration%>%
+  filter(Site == "LM", Species == "Artemisia tridentata")%>%
+  ggplot(aes(meanDOY, Duration, color = Treatment))+
+  geom_point()+ 
+  geom_line()
+
+
+
+
+
+
