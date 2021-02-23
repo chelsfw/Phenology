@@ -22,19 +22,19 @@ year <- filter(pheno, Treatment == "Control")
 treatment <- filter(pheno, Year == 2018)
 treatment <- filter(treatment, Site == "LM" | Site == "UM" | Site == "LSA" | Site == "USA")
 
-#add columns where a 1 is entered if there was an observation of a phenophase for that species
-pheno$countNL <- ifelse(pheno$NL != 0, 1, 0)
-pheno$countFLE <- ifelse(pheno$FLE != 0, 1, 0)
-pheno$countFOF <- ifelse(pheno$FOF != 0, 1, 0)
-pheno$countFLCC <- ifelse(pheno$FLCC != 0, 1, 0)
-
-#make a dataframe with the counts of the number of species observed for each year/site/block/phenophase combination
-species <- pheno%>%
-  group_by(Year, Site, Block, Treatment)%>%
-  summarise(NL = sum(!is.na(countNL)),
-            FLE = sum(!is.na(countFLE)),
-            FOF = sum(!is.na(countFOF)),
-            FLCC = sum(!is.na(countFLCC)))
+# #add columns where a 1 is entered if there was an observation of a phenophase for that species
+# pheno$countNL <- ifelse(pheno$NL != 0, 1, 0)
+# pheno$countFLE <- ifelse(pheno$FLE != 0, 1, 0)
+# pheno$countFOF <- ifelse(pheno$FOF != 0, 1, 0)
+# pheno$countFLCC <- ifelse(pheno$FLCC != 0, 1, 0)
+# 
+# #make a dataframe with the counts of the number of species observed for each year/site/block/phenophase combination
+# species <- pheno%>%
+#   group_by(Year, Site, Block, Treatment)%>%
+#   summarise(NL = sum(!is.na(countNL)),
+#             FLE = sum(!is.na(countFLE)),
+#             FOF = sum(!is.na(countFOF)),
+#             FLCC = sum(!is.na(countFLCC)))
 
 ####YEAR####
 #reorder dataset to be longer (events are in an 'event' column instead of columns of their own)
@@ -42,18 +42,9 @@ year <- year %>%
   pivot_longer(cols = c("NL", "FLE", "FOF","FLCC"),
                names_to = "Event", values_to = "DOY") 
 
-#calculate means by block
 year <- year%>%
   group_by(Year, Site, Block, Treatment, Species, Event)%>%
   summarise(meanDOY = mean(DOY, na.rm = T))
-
-year <- year%>%
-  pivot_wider(names_from = Event, values_from = meanDOY)
-
-#reorder
-year <- year %>% 
-  pivot_longer(cols = c("NL", "FLE", "FOF","FLCC"),
-               names_to = "Event", values_to = "meanDOY") 
 
 year <- year%>%
   pivot_wider(names_from = Year, values_from = meanDOY)
@@ -64,22 +55,38 @@ year <- select(year, -c('2018', '2017'))
 
 year <- na.omit(year)
 
+year <- year%>%
+  pivot_wider(names_from = Event, values_from = yr_effect)
+
+species <- year
+species$NL <- ifelse(species$NL < 0 | species$NL > 0 | species$NL == 0, yes = 1, no = 0)
+species$FLE <- ifelse(species$FLE < 0 | species$FLE > 0 | species$FLE == 0, yes = 1, no = 0)
+species$FOF <- ifelse(species$FOF < 0 | species$FOF > 0 | species$FOF == 0, yes = 1, no = 0)
+species$FLCC <- ifelse(species$FLCC < 0 | species$FLCC > 0 | species$FLCC == 0, yes = 1, no = 0)
+
+year <- year %>% 
+  pivot_longer(cols = c("NL", "FLE", "FOF","FLCC"),
+               names_to = "Event", values_to = "yr_effect") 
+
 #early or late
 year$early_late <- 0
 year$early_late <- ifelse(test = year$yr_effect < 0, yes = "Advance", no = year$early_late)
 year$early_late <- ifelse(test = year$yr_effect > 0, yes = "Delay", no = year$early_late)
 year$early_late <- ifelse(test = year$yr_effect == 0, yes = "No_Change", no = year$early_late)
+year <- na.omit(year)
 year$count <- 1
 
 #combine species and year dataframes
-species_yr <- filter(species, Treatment == "Control")
+species_yr <- species%>%
+  group_by(Site, Block, Treatment)%>%
+  summarise(NL = sum(!is.na(NL)),
+            FLE = sum(!is.na(FLE)),
+            FOF = sum(!is.na(FOF)),
+            FLCC = sum(!is.na(FLCC)))
 
 species_yr <- species_yr %>% 
   pivot_longer(cols = c("NL", "FLE", "FOF","FLCC"),
                names_to = "Event", values_to = "number_of_species") 
-
-species_yr <- species_yr%>%
-  pivot_wider(names_from = Year, values_from = number_of_species)
 
 yr_percents <- year%>%
   group_by(Site, Block, Treatment, Event, early_late)%>%
@@ -89,6 +96,10 @@ yr_percents <- yr_percents%>%
   pivot_wider(names_from = early_late, values_from = count)
 
 yr_percent <- left_join(yr_percents, species_yr, by = c("Site", "Block", "Treatment", "Event"))
+
+yr_percent$percent_advanced <- (yr_percent$Advance/yr_percent$number_of_species)*100
+yr_percent$percent_delayed <- (yr_percent$Delay/yr_percent$number_of_species)*100
+yr_percent$percent_no_change <- (yr_percent$No_Change/yr_percent$number_of_species)*100
 
 ####TRMT --> haven't done anything with this yet####
 #reorder dataset to be longer (events are in an 'event' column instead of columns of their own)
