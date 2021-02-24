@@ -101,6 +101,23 @@ yr_percent$percent_advanced <- (yr_percent$Advance/yr_percent$number_of_species)
 yr_percent$percent_delayed <- (yr_percent$Delay/yr_percent$number_of_species)*100
 yr_percent$percent_no_change <- (yr_percent$No_Change/yr_percent$number_of_species)*100
 
+yr_percent$Site <- factor(yr_percent$Site, levels = c("LM", "UM", "LSA", "USA", "ALP"))
+yr_percent_graph <- yr_percent%>%
+  group_by(Site, Treatment, Event)%>%
+  summarise(mean = mean(percent_advanced, na.rm = T))
+yr_percent_graph$Elevation <- 0
+yr_percent_graph$Elevation <- ifelse(yr_percent_graph$Site == "LM", 2774, yr_percent_graph$Elevation)
+yr_percent_graph$Elevation <- ifelse(yr_percent_graph$Site == "UM", 2957, yr_percent_graph$Elevation)
+yr_percent_graph$Elevation <- ifelse(yr_percent_graph$Site == "LSA", 3169, yr_percent_graph$Elevation)
+yr_percent_graph$Elevation <- ifelse(yr_percent_graph$Site == "USA", 3475, yr_percent_graph$Elevation)
+yr_percent_graph$Elevation <- ifelse(yr_percent_graph$Site == "ALP", 3597, yr_percent_graph$Elevation)
+
+yr_percent_graph$Site <- factor(yr_percent_graph$Site, levels = c("LM", "UM", "LSA", "USA", "ALP"))
+ggplot(yr_percent_graph, aes(Elevation, mean, color = Event))+
+  geom_point()+
+  geom_line()+
+  labs(title = "Year Effect on Timing of Phenophases", y = "% Species Early", x = "Elevation (m)")
+
 ####TRMT --> haven't done anything with this yet####
 #reorder dataset to be longer (events are in an 'event' column instead of columns of their own)
 treatment <- treatment %>% 
@@ -122,23 +139,40 @@ treatment <- select(treatment, -c(Early, Control))
 
 treatment <- na.omit(treatment)
 
+treatment <- treatment%>%
+  pivot_wider(names_from = Event, values_from = trmt_effect)
+
+species_trmt <- treatment
+species_trmt$NL <- ifelse(species_trmt$NL < 0 | species_trmt$NL > 0 | species_trmt$NL == 0, yes = 1, no = 0)
+species_trmt$FLE <- ifelse(species_trmt$FLE < 0 | species_trmt$FLE > 0 | species_trmt$FLE == 0, yes = 1, no = 0)
+species_trmt$FOF <- ifelse(species_trmt$FOF < 0 | species_trmt$FOF > 0 | species_trmt$FOF == 0, yes = 1, no = 0)
+species_trmt$FLCC <- ifelse(species_trmt$FLCC < 0 | species_trmt$FLCC > 0 | species_trmt$FLCC == 0, yes = 1, no = 0)
+
+
+treatment <- treatment %>% 
+  pivot_longer(cols = c("NL", "FLE", "FOF","FLCC"),
+               names_to = "Event", values_to = "trmt_effect") 
+
+
 #early or late
 treatment$early_late <- 0
 treatment$early_late <- ifelse(test = treatment$trmt_effect < 0, yes = "Advance", no = treatment$early_late)
 treatment$early_late <- ifelse(test = treatment$trmt_effect > 0, yes = "Delay", no = treatment$early_late)
 treatment$early_late <- ifelse(test = treatment$trmt_effect == 0, yes = "No Change", no = treatment$early_late)
+treatment <- na.omit(treatment)
 treatment$count <- 1
 
 #combine species and year dataframes
-species_trmt <- filter(species, Year == "2018")
-species_trmt <- filter(species_trmt, Site == "LM" | Site == "UM" | Site == "LSA" | Site == "USA")
+species_trmt <- species_trmt%>%
+  group_by(Site, Block)%>%
+  summarise(NL = sum(!is.na(NL)),
+            FLE = sum(!is.na(FLE)),
+            FOF = sum(!is.na(FOF)),
+            FLCC = sum(!is.na(FLCC)))
 
-species_trmt <- species_trmt%>% 
+species_trmt <- species_trmt %>% 
   pivot_longer(cols = c("NL", "FLE", "FOF","FLCC"),
                names_to = "Event", values_to = "number_of_species") 
-
-species_trmt <- species_trmt%>%
-  pivot_wider(names_from = Treatment, values_from = number_of_species)
 
 trmt_percents <- treatment%>%
   group_by(Site, Block, Event, early_late)%>%
@@ -149,7 +183,31 @@ trmt_percents <- trmt_percents%>%
 
 trmt_percent <- left_join(trmt_percents, species_trmt, by = c("Site", "Block", "Event"))
 
-trmt_percent <- select(trmt_percent, -c(Year))
+trmt_percent$percent_advanced <- (trmt_percent$Advance/trmt_percent$number_of_species)*100
+trmt_percent$percent_delayed <- (trmt_percent$Delay/trmt_percent$number_of_species)*100
+trmt_percent$percent_no_change <- (trmt_percent$No_Change/trmt_percent$number_of_species)*100
+
+trmt_percent$Site <- factor(trmt_percent$Site, levels = c("LM", "UM", "LSA", "USA", "ALP"))
+trmt_percent_graph <- trmt_percent%>%
+  group_by(Site, Event)%>%
+  summarise(mean = mean(percent_advanced, na.rm = T))
+
+trmt_percent_graph$Elevation <- 0
+trmt_percent_graph$Elevation <- ifelse(trmt_percent_graph$Site == "LM", 2774, trmt_percent_graph$Elevation)
+trmt_percent_graph$Elevation <- ifelse(trmt_percent_graph$Site == "UM", 2957, trmt_percent_graph$Elevation)
+trmt_percent_graph$Elevation <- ifelse(trmt_percent_graph$Site == "LSA", 3169, trmt_percent_graph$Elevation)
+trmt_percent_graph$Elevation <- ifelse(trmt_percent_graph$Site == "USA", 3475, trmt_percent_graph$Elevation)
+trmt_percent_graph$Elevation <- ifelse(trmt_percent_graph$Site == "ALP", 3597, trmt_percent_graph$Elevation)
+
+trmt_percent_graph$Site <- factor(trmt_percent_graph$Site, levels = c("LM", "UM", "LSA", "USA", "ALP"))
+ggplot(trmt_percent_graph, aes(Elevation, mean, color = Event))+
+  geom_point()+
+  geom_line()+
+  labs(title = "Treatment Effect on Timing of Phenophases", y = "% Species Early", x = "Elevation (m)")
+
+
+
+
 
 
 
