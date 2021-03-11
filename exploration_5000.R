@@ -118,8 +118,8 @@ days_since_snowmelt_yr <- days_since_snowmelt_yr%>%
 days_since_snowmelt_yr <- na.omit(days_since_snowmelt_yr)
 
 ####YEAR STATS####
-col_name_output <- c("", "term", "estimate", "std.error", "statistic", "p.value", "veg", "y-var")
-all_results <- data.frame(matrix(vector(), 0, length(col_name_output), dimnames = list(c(), col_name_output)), stringsAsFactors = T)
+col_name_output <- c("Site", "Phenophase", "statistic", "p.value")
+all_results_yr <- data.frame(matrix(vector(), 0, length(col_name_output), dimnames = list(c(), col_name_output)), stringsAsFactors = T)
 
 pp = unique(days_since_snowmelt_yr$Event)
 pp
@@ -132,9 +132,14 @@ for (p in pp) {
     print(s)
     t = filter(days_since_snowmelt_yr, Event == p & Site == s)
     stats = t.test(t$`2018`, t$`2017`, vars.equal = F)
-    print(stats)
+    print(all_results_yr)
+    x = c(s, p, round(stats$statistic, 3), round(stats$p.value, 3))
+    names(x) = col_name_output
+    all_results_yr = rbind(all_results_yr, x)
   }
 }
+
+colnames(all_results_yr) = col_name_output
 
 ####Days since snowmelt for YEAR####
 days_since_snowmelt_trmt <- filter(days_since_snowmelt, Year == 2018)
@@ -160,6 +165,9 @@ days_since_snowmelt_trmt <- days_since_snowmelt_trmt%>%
 days_since_snowmelt_trmt <- na.omit(days_since_snowmelt_trmt)
 
 ####TRMT STATS####
+col_name_output_trmt <- c("Site", "Phenophase", "statistic", "p.value")
+all_results_trmt <- data.frame(matrix(vector(), 0, length(col_name_output), dimnames = list(c(), col_name_output)), stringsAsFactors = T)
+
 pp = unique(days_since_snowmelt_trmt$Event)
 pp
 site = unique(days_since_snowmelt_trmt$Site)
@@ -171,6 +179,11 @@ for (p in pp) {
     print(s)
     t = filter(days_since_snowmelt_trmt, Event == p & Site == s)
     stats = t.test(t$Early, t$Control, vars.equal = F)
-    print(stats)
+    print(all_results_trmt)
+    x = c(s, p, round(stats$statistic, 3), round(stats$p.value, 3))
+    names(x) = col_name_output_trmt
+    all_results_trmt = rbind(all_results_trmt, x)
   }
 }
+
+colnames(all_results_trmt) = col_name_output_trmt

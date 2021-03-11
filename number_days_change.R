@@ -112,6 +112,9 @@ ggplot(yr_and_trmt, aes(Site, Mean_Days_Change, color = Effect))+
   labs(title = "Mean number of days difference in timing", y = "# of days change")
 
 ####YEAR STATS####
+col_name_output <- c("Site", "Phenophase", "statistic", "p.value")
+all_results_yr <- data.frame(matrix(vector(), 0, length(col_name_output), dimnames = list(c(), col_name_output)), stringsAsFactors = T)
+
 pp = unique(year$Event)
 pp
 site = unique(year$Site)
@@ -123,11 +126,19 @@ for (p in pp) {
     print(s)
     t = filter(year, Event == p & Site == s)
     stats = t.test(t$yr_effect, mu = 0)
-    print(stats)
+    print(all_results_yr)
+    x = c(s, p, round(stats$statistic, 3), round(stats$p.value, 3))
+    names(x) = col_name_output
+    all_results_yr = rbind(all_results_yr, x)
   }
 }
 
+colnames(all_results_yr) = col_name_output
+
 ####TRMT STATS####
+col_name_output_trmt <- c("Site", "Phenophase", "statistic", "p.value")
+all_results_trmt <- data.frame(matrix(vector(), 0, length(col_name_output), dimnames = list(c(), col_name_output)), stringsAsFactors = T)
+
 pp_trmt = unique(treatment$Event)
 pp_trmt
 site_trmt = unique(treatment$Site)
@@ -139,6 +150,11 @@ for (p in pp_trmt) {
     print(s)
     t = filter(treatment, Event == p & Site == s)
     stats = t.test(t$trmt_effect, mu = 0)
-    print(stats)
+    print(all_results_trmt)
+    x = c(s, p, round(stats$statistic, 3), round(stats$p.value, 3))
+    names(x) = col_name_output_trmt
+    all_results_trmt = rbind(all_results_trmt, x)
   }
 }
+
+colnames(all_results_trmt) = col_name_output_trmt
