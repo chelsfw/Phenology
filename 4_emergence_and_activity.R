@@ -93,7 +93,7 @@ treatment <- treatment%>%
 
 treatment <- na.omit(treatment)
 
-treatment$trmt_effect <- treatment$Treatment - treatment$Control
+treatment$trmt_effect <- treatment$Early - treatment$Control
 
 #what does THIS shit look like
 lm <- treatment%>%
@@ -206,7 +206,7 @@ treatment <- treatment%>%
 
 treatment <- na.omit(treatment)
 
-treatment$trmt_effect <- treatment$Treatment - treatment$Control
+treatment$trmt_effect <- treatment$Early - treatment$Control
 
 #what does this shit look like
 lm <- treatment%>%

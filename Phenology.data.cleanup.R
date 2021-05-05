@@ -45,6 +45,27 @@ pheno$Site <- ifelse(test = pheno$Site == "Lower Sub-alpine", yes = "LSA", no = 
 pheno$Site <- ifelse(test = pheno$Site == "Upper Montane", yes = "UM", no = pheno$Site)
 pheno$Site <- ifelse(test = pheno$Site == "Lower Montane", yes = "LM", no = pheno$Site)
 
+## Add EOS dates to data
+pheno$EOS <- 0
+pheno$EOS <- ifelse(pheno$Year == 2017 & pheno$Site == "LM", 281, pheno$EOS)
+pheno$EOS <- ifelse(pheno$Year == 2017 & pheno$Site == "UM", 304, pheno$EOS)
+pheno$EOS <- ifelse(pheno$Year == 2017 & pheno$Site == "LSA", 304, pheno$EOS)
+pheno$EOS <- ifelse(pheno$Year == 2017 & pheno$Site == "USA", 282, pheno$EOS)
+pheno$EOS <- ifelse(pheno$Year == 2017 & pheno$Site == "ALP", 282, pheno$EOS)
+pheno$EOS <- ifelse(pheno$Year == 2018 & pheno$Site == "LM", 283, pheno$EOS)
+pheno$EOS <- ifelse(pheno$Year == 2018 & pheno$Site == "UM", 283, pheno$EOS)
+pheno$EOS <- ifelse(pheno$Year == 2018 & pheno$Site == "LSA", 283, pheno$EOS)
+pheno$EOS <- ifelse(pheno$Year == 2018 & pheno$Site == "USA", 281, pheno$EOS)
+pheno$EOS <- ifelse(pheno$Year == 2018 & pheno$Site == "ALP", 281, pheno$EOS)
+
+## Add elevations
+pheno$Elevation <- 0
+pheno$Elevation <- ifelse(pheno$Site == "LM", 2774, pheno$Elevation)
+pheno$Elevation <- ifelse(pheno$Site == "UM", 2957, pheno$Elevation)
+pheno$Elevation <- ifelse(pheno$Site == "LSA", 3169, pheno$Elevation)
+pheno$Elevation <- ifelse(pheno$Site == "USA", 3475, pheno$Elevation)
+pheno$Elevation <- ifelse(pheno$Site == "ALP", 3597, pheno$Elevation)
+
 ## $Duplicate.Plot
 pheno <- dplyr::rename(pheno, Duplicate.Plot = Block.Plot)
 # use logical ifelse statement to assign new values 

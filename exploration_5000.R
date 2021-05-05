@@ -41,20 +41,20 @@ ggplot(snowmelt_graph, aes(DOYsf, Elevation, color = Treatment))+
 #average over subplots
 growing_season <- pheno%>%
   group_by(Year, Site, Elevation, Block, Treatment)%>%
-  summarise(NL = mean(NL, na.rm = T),
-            FLCC = mean(FLCC, na.rm = T))
+  summarise(DOYsf = mean(DOYsf, na.rm = T),
+            EOS = mean(EOS, na.rm = T))
 
 #average over block for graphing
 growing_season <- pheno%>%
   group_by(Year, Site, Elevation, Treatment)%>%
-  summarise(NL = mean(NL, na.rm = T),
-            FLCC = mean(FLCC, na.rm = T))
+  summarise(DOYsf = mean(DOYsf, na.rm = T),
+            EOS = mean(EOS, na.rm = T))
 
 #calculate start and end
 growing_season <- pheno%>%
   group_by(Year, Site, Elevation, Treatment)%>%
-  summarise(start = min(NL, na.rm = T),
-            end = max(FLCC, na.rm = T))
+  summarise(start = min(DOYsf, na.rm = T),
+            end = max(EOS, na.rm = T))
 
 #growing_season$duration <- growing_season$end - growing_season$start
 

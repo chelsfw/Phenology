@@ -8,8 +8,6 @@ library(tidyverse)
 
 ####Bring in phenology data####
 source("/Users/chelseawilmer/Desktop/Github/Phenology/Phenology.data.cleanup.R")
-# path for Dana
-#source("Phenology.data.cleanup.R")
 
 #remove columns that we don't need
 pheno <- select(pheno, -c(Duplicate.Plot, FBB, FLB, Plot))
@@ -21,61 +19,78 @@ year <- filter(pheno, Treatment == "Control")
 treatment <- filter(pheno, Year == 2018)
 treatment <- filter(treatment, Site == "LM" | Site == "UM" | Site == "LSA" | Site == "USA")
 
-####YEAR####
-#reorder dataset to be longer (events are in an 'event' column instead of columns of their own)
+####Durations for YEAR####
+year <- year%>%
+  group_by(Year, Site, Block, Treatment, Species)%>%
+  summarise(NL= mean(NL, na.rm = T),
+            FLE= mean(FLE, na.rm = T),
+            FOF= mean(FOF, na.rm = T),
+            FLCC= mean(FLCC, na.rm = T),
+            EOS= mean(EOS, na.rm = T))
+
+#Calculate durations as event2 - event1, event3 - event2 etc
+#calculate NL-DOYsf
+year$NL <- year$FLE - year$NL
+year$FLE <- year$FOF - year$FLE
+year$FOF <- year$FLCC - year$FOF
+year$FLCC <- year$EOS - year$FLCC
+
+#reorganize data
 year <- year %>% 
-  pivot_longer(cols = c("NL", "FLE", "FOF","FLCC"),
-               names_to = "Event", values_to = "DOY") 
+  pivot_longer(cols = c("NL", "FLE", "FOF", "FLCC"),
+               names_to = "Event", values_to = "duration") 
 
-#average over subplots
+year <- na.omit(year)
+year <- select(year, -c(EOS))
 year <- year%>%
-  group_by(Year, Site, Block, Treatment, Species, Event)%>%
-  summarise(meanDOY = mean(DOY, na.rm = T))
-
-#reorder to take difference in mean DOY between 2018 and 2017
-year <- year%>%
-  pivot_wider(names_from = Year, values_from = meanDOY)
-
-year$yr_effect <- year$`2018` - year$`2017`
-
-year <- select(year, -c('2018', '2017'))
+  pivot_wider(names_from = Year, values_from = duration)
 
 year <- na.omit(year)
 
-#average over block for graphing
-year_graph <- year%>%
-  group_by(Site, Species, Event)%>%
-  summarise(mean_days_change_yr = mean(yr_effect))
+year$yr_effect <- year$`2018` - year$`2017`
 
-#remove boechera outlier
-year_graph <- year_graph[-c(17),]
+year <- select(year, -c("2017", "2018"))
 
 #set levels for site and phenophase
+year_graph <- year%>%
+  group_by(Site, Treatment, Species, Event)%>%
+  summarise(yr_effect = mean(yr_effect, na.rm = T))
+
 year_graph$Site <- factor(year_graph$Site, c("LM", "UM", "LSA", "USA", "ALP"))
 year_graph$Event <- factor(year_graph$Event, c("NL", "FLE", "FOF", "FLCC"))
 
 #boxplots for each site per phenophase
-ggplot(year_graph, aes(Event, mean_days_change_yr, color = Site))+
+ggplot(year_graph, aes(Event, yr_effect, color = Site))+
   geom_boxplot()+
   theme_bw()+
   scale_y_continuous(limits = c(-60, 60))+
-  labs(title = "Year Effect on Number of Days Change in Timing", y = "# of days change")
+  labs(title = "Year Effect on Number of Days Change in Duration", y = "# of days change")
 
-
-####TRMT####
+####Durations for TRMT####
 #reorder dataset to be longer (events are in an 'event' column instead of columns of their own)
+treatment <- treatment%>%
+  group_by(Site, Block, Treatment, Species)%>%
+  summarise(NL= mean(NL, na.rm = T),
+            FLE= mean(FLE, na.rm = T),
+            FOF= mean(FOF, na.rm = T),
+            FLCC= mean(FLCC, na.rm = T),
+            EOS= mean(EOS, na.rm = T))
+
+#Calculate durations as event2 - event1, event3 - event2 etc
+#calculate NL-DOYsf
+treatment$NL <- treatment$FLE - treatment$NL
+treatment$FLE <- treatment$FOF - treatment$FLE
+treatment$FOF <- treatment$FLCC - treatment$FOF
+treatment$FLCC <- treatment$EOS - treatment$FLCC
+
+treatment <- select(treatment, -c(EOS))
 treatment <- treatment %>% 
   pivot_longer(cols = c("NL", "FLE", "FOF","FLCC"),
-               names_to = "Event", values_to = "DOY") 
+               names_to = "Event", values_to = "duration") 
 
-#calculate means by block
+#reorder dataset to get events back into columns
 treatment <- treatment%>%
-  group_by(Site, Block, Treatment, Species, Event)%>%
-  summarise(meanDOY = mean(DOY, na.rm = T))
-
-#reorder dataset to take difference between treatment and control plots
-treatment <- treatment%>%
-  pivot_wider(names_from = Treatment, values_from = meanDOY)
+  pivot_wider(names_from = Treatment, values_from = duration)
 
 treatment$trmt_effect <- treatment$Early - treatment$Control
 
@@ -83,35 +98,20 @@ treatment <- select(treatment, -c(Early, Control))
 
 treatment <- na.omit(treatment)
 
-#average over block for graphing
+#set levels for site and phenophase
 treatment_graph <- treatment%>%
   group_by(Site, Species, Event)%>%
-  summarise(mean_days_change_trmt = mean(trmt_effect))
+  summarise(trmt_effect = mean(trmt_effect, na.rm = T))
 
-#set levels for site and phenophase
 treatment_graph$Site <- factor(treatment_graph$Site, c("LM", "UM", "LSA", "USA", "ALP"))
 treatment_graph$Event <- factor(treatment_graph$Event, c("NL", "FLE", "FOF", "FLCC"))
 
 #boxplots for each site per phenophase
-ggplot(treatment_graph, aes(Event, mean_days_change_trmt, color = Site))+
+ggplot(treatment_graph, aes(Event, trmt_effect, color = Site))+
   geom_boxplot()+
   theme_bw()+
   scale_y_continuous(limits = c(-60, 60))+
-  labs(title = "Treatment Effect on Number of Days Change in Timing", y = "# of days change")
-
-####Combined###
-#combine year_graph and trmt_graph to be able to see graph as yr_effect next to trmt_effect
-yr_and_trmt <- left_join(year_graph, treatment_graph, by = c("Site", "Species", "Event"))
-
-yr_and_trmt <- yr_and_trmt%>%
-  pivot_longer(cols = c("mean_days_change_yr", "mean_days_change_trmt"),
-                names_to = "Effect", values_to = "Mean_Days_Change")
-
-ggplot(yr_and_trmt, aes(Site, Mean_Days_Change, color = Effect))+
-  geom_boxplot()+
-  scale_y_continuous(limits = c(-60, 60))+
-  facet_grid(Event~.)+
-  labs(title = "Mean number of days difference in timing", y = "# of days change")
+  labs(title = "Treatment Effect on Number of Days Change in Duration", y = "# of days change")
 
 ####YEAR STATS####
 col_name_output <- c("Site", "Phenophase", "statistic", "p.value")

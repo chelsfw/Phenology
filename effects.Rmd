@@ -1,0 +1,124 @@
+---
+title: ""
+author: ""
+date: ""
+output: word_document
+---
+
+```{r setup, include=FALSE}
+rm(list = ls())
+library(tidyverse)
+library(lme4)
+library(lmerTest)
+library(emmeans)
+library(effects)
+library(gridExtra)
+
+source("/Users/chelseawilmer/Desktop/Github/Phenology/Phenology.data.cleanup.R")
+str(pheno)
+
+#make variables factors
+pheno$Year <- as.factor(pheno$Year)
+pheno$Site <- as.factor(pheno$Site)
+pheno$PlotPair <- as.factor(pheno$PlotPair)
+pheno$Plot_ID <- as.factor(pheno$Plot_ID)
+pheno$Subplot_ID <- as.factor(pheno$Subplot_ID)
+pheno$Treatment <- as.factor(pheno$Treatment)
+pheno$Species <- as.factor(pheno$Species)
+pheno$Functional.Type <- as.factor(pheno$Functional.Type)
+pheno$Elevation <- as.integer(pheno$Elevation)
+
+pheno <- select(pheno, -c(Plot, Subplot, FBB, FLB))
+
+duration <- pheno
+duration$NL <- duration$FLE - duration$NL
+duration$FLE <- duration$FOF - duration$FLE
+duration$FOF <- duration$FLCC - duration$FOF
+duration$FLCC <- duration$EOS - duration$FLCC
+
+#interaction plots
+qplot(x = DOYsf, y = NL, color = factor(Elevation), data = pheno) +
+geom_smooth(method = lm, se = FALSE, fullrange = T)
+
+qplot(x = DOYsf, y = FLE, color = factor(Elevation), data = pheno) +
+geom_smooth(method = lm, se = FALSE, fullrange = T)
+
+qplot(x = DOYsf, y = FOF, color = factor(Elevation), data = pheno) +
+geom_smooth(method = lm, se = FALSE, fullrange = T)
+
+qplot(x = DOYsf, y = FLCC, color = factor(Elevation), data = pheno) +
+geom_smooth(method = lm, se = FALSE, fullrange = T)
+
+```
+
+###### 1. NL ~ DOYsf*Elevation + Species + (1|PlotPair) + (1|Plot_ID) + (1|Subplot_ID), data = pheno)
+```{r, echo=FALSE}
+model1 <- lmer(NL ~ DOYsf*Elevation + Species + (1|PlotPair) + (1|Plot_ID) + (1|Subplot_ID), data = pheno)
+
+plot(effect(term = "DOYsf:Elevation", mod = model1, default.levels = 5), multiline = TRUE)
+
+anova(model1, ddf = "Kenward-Roger")
+
+```
+
+###### 2. NL ~ DOYsf*Site + Species + (1|PlotPair) + (1|Plot_ID) + (1|Subplot_ID), data = pheno)
+```{r, echo=FALSE}
+model2 <- lmer(NL ~ DOYsf*Site + Species + (1|PlotPair) + (1|Plot_ID) + (1|Subplot_ID), data = pheno)
+
+plot(effect(term = "DOYsf:Elevation", mod = model2, default.levels = 5), multiline = TRUE)
+
+anova(model2, ddf = "Kenward-Roger")
+
+summary(model2)
+#slope of DOYsf:Elevation = .00005986959e-05, p-value = 3.252680e-02
+
+emtrends(model2, pairwise ~ Site, var="DOYsf", at=list(Treatment = "Early"))
+```
+
+###### 3. 
+```{r, echo=FALSE}
+model4 <- lmer(FLE ~ DOYsf*Elevation + Species + (1|PlotPair) + (1|Plot_ID) + (1|Subplot_ID), data = pheno)
+
+plot(effect(term = "DOYsf:Elevation", mod = model4, default.levels = 5), multiline = TRUE)
+
+anova(model2, ddf = "Kenward-Roger")
+summary(model2)
+
+```
+
+###### 4. 
+```{r, echo=FALSE}
+model5 <- lmer(FOF ~ DOYsf*Elevation + Species + (1|PlotPair) + (1|Plot_ID) + (1|Subplot_ID), data = pheno)
+
+plot(effect(term = "DOYsf:Elevation", mod = model5, default.levels = 5), multiline = TRUE)
+
+anova(model3, ddf = "Kenward-Roger")
+coef(summary(model3))
+# slope of DOYsf:Elevation = 6.533054e-04, p-value = 7.651392e-30
+```
+
+###### 5. 
+```{r, echo=FALSE}
+model6 <- lmer(FLCC ~ DOYsf*Elevation + Species + (1|PlotPair) + (1|Plot_ID) + (1|Subplot_ID), data = pheno)
+
+plot(effect(term = "DOYsf:Elevation", mod = model6, default.levels = 5), multiline = TRUE)
+
+anova(model4, ddf = "Kenward-Roger")
+coef(summary(model4))
+# slope of DOYsf:Elevation = 0.00161712, p-value = 3.080217e-54
+```
+
+###### 7. 
+```{r, echo=FALSE}
+model7 <- lmer(FOF ~ DOYsf*Site + Species + (1|PlotPair) + (1|Plot_ID) + (1|Subplot_ID), data = pheno)
+
+plot(effect(term = "DOYsf:Elevation", mod = model2, default.levels = 5), multiline = TRUE)
+
+anova(model2, ddf = "Kenward-Roger")
+
+summary(model2)
+#slope of DOYsf:Elevation = .00005986959e-05, p-value = 3.252680e-02
+
+emtrends(model7, pairwise ~ Site, var="DOYsf")
+```
+
