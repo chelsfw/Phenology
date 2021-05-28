@@ -112,39 +112,8 @@ trmt <- left_join(treatment, treatment_duration, by = c("Site", "Treatment", "Ev
 yr <- left_join(year, year_duration, by = c("Year", "Site", "Event"))
 
 ####Timing x Duration####
-#year split by event
-yr$Year <- as.factor(yr$Year)
-nl <- yr%>%
-  filter(Event == "NL")%>%
-  ggplot(aes(Duration, meanDOY, color = Year, shape = Site))+
-  geom_point()+
-  labs(title = "New Leaves")
-nl
-
-fle <- yr%>%
-  filter(Event == "FLE")%>%
-  ggplot(aes(Duration, meanDOY, color = Year, shape = Site))+
-  geom_point()+
-  labs(title = "Full Leaf Expansion")
-fle
-
-fof <- yr%>%
-  filter(Event == "FOF")%>%
-  ggplot(aes(Duration, meanDOY, color = Year, shape = Site))+
-  geom_point()+
-  labs(title = "First Open Flower")
-fof
-
-flcc <- yr%>%
-  filter(Event == "FLCC")%>%
-  ggplot(aes(Duration, meanDOY, color = Year, shape = Site))+
-  geom_point()+
-  labs(title = "Full Leaf Color Change")
-flcc
-
-ggarrange(nl, fle, fof, flcc, nrow = 3, ncol = 2, common.legend = T, legend = "right")
-
 #year split by site
+yr$Year <- as.factor(yr$Year)
 lm <- yr%>%
   filter(Site == "LM")%>%
   ggplot(aes(Duration, meanDOY, color = Year, shape = Event))+

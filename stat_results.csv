@@ -1,0 +1,26 @@
+﻿Phase,Site,yr_effect_timing,yr_timing_p,advance/delay,yr_effect_duration,yr_duration_p,increase/decrease,trmt_effect_timing,trmt_timing_p,advance/delay,trmt_effect_duration,trmt_duration_p,decreased/increased
+DOYsf,LM,-20.8,0.0001,advanced,-1.822,0.0055,decreased,-6.7677,0.0015,advanced,6.0015,0.0001,increased
+DOYsf,UM,-22.3,0.0001,advanced,-1.113,0.0405,decreased,-7.66667,0.0005,advanced,1.8248,0.0652,increased
+DOYsf,LSA,-19,0.0001,advanced,-4.341,0.0001,decreased,-7.66875,0.0004,advanced,1.554,0.109,increased
+DOYsf,USA,-26.2,0.0001,advanced,-1.137,0.092,decreased,-17.16667,0.0001,advanced,0.0161,0.9846,No change
+DOYsf,ALP,-37.8,0.0001,advanced,4.946,0.0001,increased,,,,,,
+NL,LM,-22.6,0.0001,advanced,-4.821,0.0001,decreased,-1.028,0.6627,advanced,0.694,0.3862,No change
+NL,UM,-23.5,0.0001,advanced,1.325,0.0206,increased,-5.835,0.0312,advanced,1.84,0.0233,increased
+NL,LSA,-23.3,0.0001,advanced,0.197,0.7398,No change,-6.264,0.0231,advanced,1.081,0.1595,increased
+NL,USA,-27.2,0.0001,advanced,-0.644,0.3867,No change,-17.053,0.0001,advanced,0.676,0.3896,No change
+NL,ALP,-33.5,0.0001,advanced,-1.297,0.3578,decreased,,,,,,
+FLE,LM,-27.3,0.0001,advanced,20.19,0.0001,increased,-0.2353,0.9086,No change,1.998,0.2622,increased
+FLE,UM,-22.1,0.0001,advanced,13.69,0.0001,longer,-3.9813,0.0753,advanced,-0.698,0.6464,No change
+FLE,LSA,-22.6,0.0001,advanced,5.82,0.0001,longer,-5.2542,0.0266,advanced,1.687,0.2253,increased
+FLE,USA,-27.7,0.0001,advanced,2.73,0.091,longer,-16.2085,0.0001,advanced,4.057,0.0081,increased
+FLE,ALP,-33.1,0.0001,advanced,1.32,0.4649,longer,,,,,,
+FOF,LM,-6.38,0.0003,advanced,22.15,0.0001,longer,-0.721,0.7709,No change,2.303,0.6132,increased
+FOF,UM,-9.53,0.0001,advanced,14.79,0.0001,longer,-2.469,0.2902,advanced,2.71,0.3892,increased
+FOF,LSA,-17.25,0.0001,advanced,9.1,0.0005,longer,-3.599,0.1261,advanced,-1.541,0.61,decreased
+FOF,USA,-24.89,0.0001,advanced,4.62,0.0747,longer,-11.425,0.0003,advanced,1.136,0.6558,increased
+FOF,ALP,-31.26,0.0001,advanced,9.13,0.0013,longer,,,,,,
+FLCC,LM,21.91,0.0001,delayed,-19.9,0.0001,decreased,1.038,0.8303,delayed,-1.038,0.8303,decreased
+FLCC,UM,7.62,0.0011,delayed,-28.7,0.0001,decreased,1.313,0.7546,delayed,-1.313,0.7546,decreased
+FLCC,LSA,8.68,0.0004,delayed,-12.3,0.0001,decreased,-1.655,0.6918,advanced,1.655,0.6918,increased
+FLCC,USA,-21.93,0.0001,advanced,20.9,0.0001,increased,-9.949,0.0279,advanced,9.949,0.0279,increased
+FLCC,ALP,-21.75,0.0001,advanced,20.8,0.0001,increased,,,,,,
