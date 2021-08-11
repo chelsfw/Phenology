@@ -19,7 +19,7 @@ str(pheno) #check column names, check data types
 # Clean up column names
 # Use rename to rename columns
 # Rename all columns at once
-pheno <- dplyr::rename(pheno, Veg.Type = Veg.type, Functional.Type = functional.type) # new name equals = old name
+pheno <- dplyr::rename(pheno, Veg.Type = Veg.type) # new name equals = old name
 # Use select to remove unwanted columns
 pheno <- dplyr::select(pheno, -c(SG, NL2, FLE2, FLD)) # drop variables that are not currently going to be used for analysis. May want to include these later
 

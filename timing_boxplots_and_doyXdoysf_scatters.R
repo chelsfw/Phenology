@@ -123,6 +123,7 @@ nl <- year%>%
   ggplot(aes(DOYsf, DOY, color = Site))+
   geom_point()+
   theme_bw()+
+  facet_grid(Year~.)+
   labs(title = "New Leaves")
 nl
 
@@ -131,6 +132,7 @@ fle <- year%>%
   ggplot(aes(DOYsf, DOY, color = Site))+
   geom_point()+
   theme_bw()+
+  facet_grid(Year~.)+
   labs(title = "Full Leaf Expansion")
 fle
 
@@ -139,6 +141,7 @@ fof <- year%>%
   ggplot(aes(DOYsf, DOY, color = Site))+
   geom_point()+
   theme_bw()+
+  facet_grid(Year~.)+
   labs(title = "First Open Flower")
 fof
 
@@ -147,18 +150,20 @@ flcc <- year%>%
   ggplot(aes(DOYsf, DOY, color = Site))+
   geom_point()+
   theme_bw()+
+  facet_grid(Year~.)+
   labs(title = "Full Leaf Color Change")
 flcc
 
 ggarrange(nl, fle, fof, flcc, common.legend = T, legend = "right")
 
-####TRMT SCATTER####
+ ####TRMT SCATTER####
 treatment$Site <- factor(treatment$Site, c("LM", "UM", "LSA", "USA", "ALP"))
 nl <- treatment%>%
   filter(Event == "NL")%>%
   ggplot(aes(DOYsf, DOY, color = Site))+
   geom_point()+
   theme_bw()+
+  facet_grid(Treatment~.)+
   labs(title = "New Leaves")
 nl
 
@@ -167,6 +172,7 @@ fle <- treatment%>%
   ggplot(aes(DOYsf, DOY, color = Site))+
   geom_point()+
   theme_bw()+
+  facet_grid(Treatment~.)+
   labs(title = "Full Leaf Expansion")
 fle
 
@@ -175,6 +181,7 @@ fof <- treatment%>%
   ggplot(aes(DOYsf, DOY, color = Site))+
   geom_point()+
   theme_bw()+
+  facet_grid(Treatment~.)+
   labs(title = "First Open Flower")
 fof
 
@@ -183,6 +190,7 @@ flcc <- treatment%>%
   ggplot(aes(DOYsf, DOY, color = Site))+
   geom_point()+
   theme_bw()+
+  facet_grid(Treatment~.)+
   labs(title = "Full Leaf Color Change")
 flcc
 

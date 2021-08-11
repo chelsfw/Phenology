@@ -118,6 +118,7 @@ lm <- yr%>%
   filter(Site == "LM")%>%
   ggplot(aes(Duration, meanDOY, color = Year, shape = Event))+
   geom_point()+
+  coord_fixed(ratio = 1, xlim = c(0,100), ylim = c(120,243))+
   labs(title = "Lower Montane")
 lm
 
@@ -125,6 +126,7 @@ um <- yr%>%
   filter(Site == "UM")%>%
   ggplot(aes(Duration, meanDOY, color = Year, shape = Event))+
   geom_point()+
+  coord_fixed(ratio = 1, xlim = c(0,100), ylim = c(120,243))+
   labs(title = "Upper Montane")
 um
 
@@ -132,6 +134,7 @@ lsa <- yr%>%
   filter(Site == "LSA")%>%
   ggplot(aes(Duration, meanDOY, color = Year, shape = Event))+
   geom_point()+
+  coord_fixed(ratio = 1, xlim = c(0,100), ylim = c(120,243))+
   labs(title = "Lower Subalpine")
 lsa
 
@@ -139,6 +142,7 @@ usa <- yr%>%
   filter(Site == "USA")%>%
   ggplot(aes(Duration, meanDOY, color = Year, shape = Event))+
   geom_point()+
+  coord_fixed(ratio = 1, xlim = c(0,100), ylim = c(120,243))+
   labs(title = "Upper Subalpine")
 usa
 
@@ -146,47 +150,26 @@ alp <- yr%>%
   filter(Site == "ALP")%>%
   ggplot(aes(Duration, meanDOY, color = Year, shape = Event))+
   geom_point()+
+  coord_fixed(ratio = 1, xlim = c(0,100), ylim = c(120,243))+
   labs(title = "Alpine")
 alp
 
 ggarrange(lm, um, lsa, usa, alp, nrow = 3, ncol = 2, common.legend = T, legend = "right")
 
-#trmt
-nl <- trmt%>%
-  filter(Event == "NL")%>%
-  ggplot(aes(Duration, meanDOY, color = Treatment, shape = Site))+
+#try faceting
+yr$Site <- factor(yr$Site, levels = c("LM", "UM", "LSA", "USA", "ALP"))
+ggplot(yr, aes(Duration, meanDOY, color = Year, shape = Event))+
   geom_point()+
-  labs(title = "New Leaves")
-nl
-
-fle <- trmt%>%
-  filter(Event == "FLE")%>%
-  ggplot(aes(Duration, meanDOY, color = Treatment, shape = Site))+
-  geom_point()+
-  labs(title = "Full Leaf Expansion")
-fle
-
-fof <- trmt%>%
-  filter(Event == "FOF")%>%
-  ggplot(aes(Duration, meanDOY, color = Treatment, shape = Site))+
-  geom_point()+
-  labs(title = "First Open Flower")
-fof
-
-flcc <- trmt%>%
-  filter(Event == "FLCC")%>%
-  ggplot(aes(Duration, meanDOY, color = Treatment, shape = Site))+
-  geom_point()+
-  labs(title = "Full Leaf Color Change")
-flcc
-
-ggarrange(nl, fle, fof, flcc, common.legend = T, legend = "right")
+  facet_grid(~Site)+
+  coord_fixed(ratio = 1, xlim = c(0,100), ylim = c(120,243))+
+  labs(title = "Year Effect", y = "DOY")
 
 #trmt split by site
 lm <- trmt%>%
   filter(Site == "LM")%>%
   ggplot(aes(Duration, meanDOY, color = Treatment, shape = Event))+
   geom_point()+
+  coord_fixed(ratio = 1, xlim = c(0,80), ylim = c(120,230))+
   labs(title = "Lower Montane")
 lm
 
@@ -194,6 +177,7 @@ um <- trmt%>%
   filter(Site == "UM")%>%
   ggplot(aes(Duration, meanDOY, color = Treatment, shape = Event))+
   geom_point()+
+  coord_fixed(ratio = 1, xlim = c(0,80), ylim = c(120,230))+
   labs(title = "Upper Montane")
 um
 
@@ -201,6 +185,7 @@ lsa <- trmt%>%
   filter(Site == "LSA")%>%
   ggplot(aes(Duration, meanDOY, color = Treatment, shape = Event))+
   geom_point()+
+  coord_fixed(ratio = 1, xlim = c(0,80), ylim = c(120,230))+
   labs(title = "Lower Subalpine")
 lsa
 
@@ -208,7 +193,17 @@ usa <- trmt%>%
   filter(Site == "USA")%>%
   ggplot(aes(Duration, meanDOY, color = Treatment, shape = Event))+
   geom_point()+
+  coord_fixed(ratio = 1, xlim = c(0,80), ylim = c(120,230))+
   labs(title = "Upper Subalpine")
 usa
 
 ggarrange(lm, um, lsa, usa, common.legend = T, legend = "right")
+
+#try faceting
+trmt$Site <- factor(trmt$Site, levels = c("LM", "UM", "LSA", "USA", "ALP"))
+ggplot(trmt, aes(Duration, meanDOY, color = Treatment, shape = Event))+
+  geom_point()+
+  facet_grid(~Site)+
+  coord_fixed(ratio = 1, xlim = c(0,80), ylim = c(120,230))+
+  labs(title = "Treatment Effect", y = "DOY")
+

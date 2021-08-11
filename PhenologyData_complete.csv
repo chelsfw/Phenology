@@ -1,4 +1,4 @@
-﻿Year,Site,Location_ID,PlotPair,Plot_ID,Subplot_ID,Block,Plot,Block/Plot,Subplot,Treatment,Veg type,Species,functional type,DOYsf,SG,FBB,NL,NL2,FLE,FLE2,FLB,FOF,FLD,FLCC
+﻿Year,Site,Location_ID,PlotPair,Plot_ID,Subplot_ID,Block,Plot,Block/Plot,Subplot,Treatment,Veg type,Species,Functional Type,DOYsf,SG,FBB,NL,NL2,FLE,FLE2,FLB,FOF,FLD,FLCC
 2017,Upper Sub-alpine,WG-USA1L,USA_A,USA_A_1,USA_A_1_L,A,1,A1,Left,Early,Meadow,Achillea millefolium,Forb,186,,,,,,,,,,
 2017,Upper Sub-alpine,WG-USA1L,USA_A,USA_A_1,USA_A_1_L,A,1,A1,Left,Early,Meadow,Agoseris glauca,Forb,186,,,,,,,,,,
 2017,Upper Sub-alpine,WG-USA1L,USA_A,USA_A_1,USA_A_1_L,A,1,A1,Left,Early,Meadow,Arnica perryi ,Forb,186,188,,188,,198,,,198,,229
@@ -2959,7 +2959,7 @@
 2018,Lower Montane,ER-LMC2R,LM_C,LM_C_2,LM_C_2_R,C,2,C2,Right,Control,Shrub,Festuca thurberi,Graminoid,112,1,,113,,124,,,,,
 2018,Lower Montane,ER-LMC2R,LM_C,LM_C_2,LM_C_2_R,C,2,C2,Right,Control,Shrub,Phleum pratense,Graminoid,112,,,,,,,,,,
 2018,Lower Montane,ER-LMC2R,LM_C,LM_C_2,LM_C_2_R,C,2,C2,Right,Control,Shrub,Poa pratensis,Graminoid,112,,,119,,124,,,,201,
-2018,Lower Montane,ER-LMC2R,LM_C,LM_C_2,LM_C_2_R,C,2,C2,Right,Control,Shrub,Artemisia tridentata,Shrub,112,,,124,,197,,172,213,155,225
+2018,Lower Montane,ER-LMC2R,LM_C,LM_C_2,LM_C_2_R,C,2,C2,Right,Control,Shrub,Artemisia tridentata,Shrub,112,,,124,,148,,172,213,155,225
 2018,Upper Montane,WG-UMA1L,UM_A,UM_A_1,UM_A_1_L,A,1,A1,Left,Early,Meadow,Achillea millefolium,Forb,117,,,117,230,131,240,,,155,
 2018,Upper Montane,WG-UMA1L,UM_A,UM_A_1,UM_A_1_L,A,1,A1,Left,Early,Meadow,Agoseris aurantiaca,Forb,117,,,122,,128,,,,155,201
 2018,Upper Montane,WG-UMA1L,UM_A,UM_A_1,UM_A_1_L,A,1,A1,Left,Early,Meadow,Boechera stricta,Forb,117,1,,126,,138,,,156,153,210

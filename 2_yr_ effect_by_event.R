@@ -28,7 +28,7 @@ year <- year%>%
   group_by(Year, Site, Block, Species, Event)%>%
   summarise(meanDOY = mean(DOY, na.rm = T))
 
-year <- year.stats%>%
+year <- year%>%
   group_by(Year, Site, Species, Event)%>%
   summarise(meanDOY = mean(meanDOY, na.rm = T))
 
