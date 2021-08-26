@@ -1,0 +1,91 @@
+﻿Variable,Set,Phase,Site,Effect,p-value,Change
+Timing,Year,DOYsf,LM,-20.8,0.0001,advanced
+Timing,Year,DOYsf,UM,-22.3,0.0001,advanced
+Timing,Year,DOYsf,LSA,-19,0.0001,advanced
+Timing,Year,DOYsf,USA,-26.2,0.0001,advanced
+Timing,Year,DOYsf,ALP,-37.8,0.0001,advanced
+Timing,Year,NL,LM,-22.6,0.0001,early
+Timing,Year,NL,UM,-23.5,0.0001,early
+Timing,Year,NL,LSA,-23.3,0.0001,early
+Timing,Year,NL,USA,-27.2,0.0001,early
+Timing,Year,NL,ALP,-33.5,0.0001,early
+Timing,Year,FLE,LM,-27.3,0.0001,early
+Timing,Year,FLE,UM,-22.1,0.0001,early
+Timing,Year,FLE,LSA,-22.6,0.0001,early
+Timing,Year,FLE,USA,-27.7,0.0001,early
+Timing,Year,FLE,ALP,-33.1,0.0001,early
+Timing,Year,FOF,LM,-6.38,0.0003,early
+Timing,Year,FOF,UM,-9.53,0.0001,early
+Timing,Year,FOF,LSA,-17.25,0.0001,early
+Timing,Year,FOF,USA,-24.89,0.0001,early
+Timing,Year,FOF,ALP,-31.26,0.0001,early
+Timing,Year,FLCC,LM,21.91,0.0001,late
+Timing,Year,FLCC,UM,7.62,0.0011,late
+Timing,Year,FLCC,LSA,8.68,0.0004,late
+Timing,Year,FLCC,USA,-21.93,0.0001,early
+Timing,Year,FLCC,ALP,-21.75,0.0001,early
+Duration,Year,DOYsf,LM,-1.822,0.0055,shorter
+Duration,Year,DOYsf,UM,-1.113,0.0405,shorter
+Duration,Year,DOYsf,LSA,-4.341,0.0001,shorter
+Duration,Year,DOYsf,USA,-1.137,0.092,shorter
+Duration,Year,DOYsf,ALP,4.946,0.0001,longer
+Duration,Year,NL,LM,-4.821,0.0001,shorter
+Duration,Year,NL,UM,1.325,0.0206,longer
+Duration,Year,NL,LSA,0.197,0.7398,No change
+Duration,Year,NL,USA,-0.644,0.3867,No change
+Duration,Year,NL,ALP,-1.297,0.3578,shorter
+Duration,Year,FLE,LM,20.19,0.0001,longer
+Duration,Year,FLE,UM,13.69,0.0001,longer
+Duration,Year,FLE,LSA,5.82,0.0001,longer
+Duration,Year,FLE,USA,2.73,0.091,longer
+Duration,Year,FLE,ALP,1.32,0.4649,longer
+Duration,Year,FOF,LM,22.15,0.0001,longer
+Duration,Year,FOF,UM,14.79,0.0001,longer
+Duration,Year,FOF,LSA,9.1,0.0005,longer
+Duration,Year,FOF,USA,4.62,0.0747,longer
+Duration,Year,FOF,ALP,9.13,0.0013,longer
+Duration,Year,FLCC,LM,-19.9,0.0001,shorter
+Duration,Year,FLCC,UM,-28.7,0.0001,shorter
+Duration,Year,FLCC,LSA,-12.3,0.0001,shorter
+Duration,Year,FLCC,USA,20.9,0.0001,longer
+Duration,Year,FLCC,ALP,20.8,0.0001,longer
+Timing,Treatment,DOYsf,LM,-6.7677,0.0015,advanced
+Timing,Treatment,DOYsf,UM,-7.66667,0.0005,advanced
+Timing,Treatment,DOYsf,LSA,-7.66875,0.0004,advanced
+Timing,Treatment,DOYsf,USA,-17.16667,0.0001,advanced
+Timing,Treatment,NL,LM,-1.028,0.6627,advanced
+Timing,Treatment,NL,UM,-5.835,0.0312,advanced
+Timing,Treatment,NL,LSA,-6.264,0.0231,advanced
+Timing,Treatment,NL,USA,-17.053,0.0001,advanced
+Timing,Treatment,FLE,LM,-0.2353,0.9086,No change
+Timing,Treatment,FLE,UM,-3.9813,0.0753,advanced
+Timing,Treatment,FLE,LSA,-5.2542,0.0266,advanced
+Timing,Treatment,FLE,USA,-16.2085,0.0001,advanced
+Timing,Treatment,FOF,LM,-0.721,0.7709,No change
+Timing,Treatment,FOF,UM,-2.469,0.2902,advanced
+Timing,Treatment,FOF,LSA,-3.599,0.1261,advanced
+Timing,Treatment,FOF,USA,-11.425,0.0003,advanced
+Timing,Treatment,FLCC,LM,1.038,0.8303,delayed
+Timing,Treatment,FLCC,UM,1.313,0.7546,delayed
+Timing,Treatment,FLCC,LSA,-1.655,0.6918,advanced
+Timing,Treatment,FLCC,USA,-9.949,0.0279,advanced
+Duration,Treatment,DOYsf,LM,6.0015,0.0001,longer
+Duration,Treatment,DOYsf,UM,1.8248,0.0652,longer
+Duration,Treatment,DOYsf,LSA,1.554,0.109,longer
+Duration,Treatment,DOYsf,USA,0.0161,0.9846,No change
+Duration,Treatment,NL,LM,0.694,0.3862,No change
+Duration,Treatment,NL,UM,1.84,0.0233,longer
+Duration,Treatment,NL,LSA,1.081,0.1595,longer
+Duration,Treatment,NL,USA,0.676,0.3896,No change
+Duration,Treatment,FLE,LM,1.998,0.2622,longer
+Duration,Treatment,FLE,UM,-0.698,0.6464,No change
+Duration,Treatment,FLE,LSA,1.687,0.2253,longer
+Duration,Treatment,FLE,USA,4.057,0.0081,longer
+Duration,Treatment,FOF,LM,2.303,0.6132,longer
+Duration,Treatment,FOF,UM,2.71,0.3892,longer
+Duration,Treatment,FOF,LSA,-1.541,0.61,shorter
+Duration,Treatment,FOF,USA,1.136,0.6558,longer
+Duration,Treatment,FLCC,LM,-1.038,0.8303,shorter
+Duration,Treatment,FLCC,UM,-1.313,0.7546,shorter
+Duration,Treatment,FLCC,LSA,1.655,0.6918,longer
+Duration,Treatment,FLCC,USA,9.949,0.0279,longer

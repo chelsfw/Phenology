@@ -21,7 +21,10 @@ piecewise_timing <- piecewise%>%
                names_to = "Event", values_to = "Timing")
 
 #calculate duration of events
-piecewise_duration <- mutate(piecewise, NL = FLE-NL, FLE = FOF-FLE, FOF = FLCC-FOF, FLCC = EOS-FLCC)
+piecewise_duration <- mutate(piecewise, NL = NL - DOYsf, FLE = FLE - DOYsf, FOF = FOF - DOYsf, FLCC = FLCC - DOYsf)
+
+#piecewise_duration <- mutate(piecewise_duration, NL = FLE-NL, FLE = FOF-FLE, FOF = FLCC-FOF, FLCC = EOS-FLCC)
+
 piecewise_duration <- piecewise_duration%>%
   pivot_longer(cols = c("NL", "FLE", "FOF", "FLCC"),
                names_to = "Event", values_to = "Duration")
@@ -33,7 +36,8 @@ piecewise_yr <- filter(piecewise, Treatment == "Control")
 piecewise_trmt <- filter(piecewise, Year == "2018")
 
 piecewise_yr$Event <- factor(piecewise_yr$Event, levels = c("NL", "FLE", "FOF", "FLCC"))
-ggplot(piecewise_yr, aes(Duration, Timing, color = Elevation))+
+piecewise_yr$Site <- factor(piecewise_yr$Site, levels = c("LM", "UM", "LSA", "USA", "ALP"))
+ggplot(piecewise_yr, aes(Duration, Timing, color = Site))+
   geom_point()+
   scale_x_continuous(limits = c(0, 100))+
   facet_grid(Event~Year)
@@ -43,4 +47,6 @@ piecewise_trmt$Site <- factor(piecewise_trmt$Site, levels = c("LM", "UM", "LSA",
 ggplot(piecewise_trmt, aes(Duration, Timing, color = Site))+
   geom_point()+
   scale_x_continuous(limits = c(0, 100))+
-  facet_grid(Event~Treatment) #can do scales = "free" 
+  facet_grid(Event~Treatment) #can do scales = "free"
+
+
